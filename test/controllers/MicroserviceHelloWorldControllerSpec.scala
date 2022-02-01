@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-import sbt._
+package controllers
 
-object AppDependencies {
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import play.api.http.Status
+import play.api.test.Helpers._
+import play.api.test.{FakeRequest, Helpers}
 
-  val compile = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-backend-play-28"  % "5.20.0"
-  )
+class MicroserviceHelloWorldControllerSpec extends AnyWordSpec with Matchers {
 
-  val test = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-test-play-28"     % "5.20.0"             % Test,
-    "com.vladsch.flexmark"    %  "flexmark-all"               % "0.36.8"             % "test, it"
-  )
+  private val fakeRequest = FakeRequest("GET", "/")
+  private val controller = new MicroserviceHelloWorldController(Helpers.stubControllerComponents())
+
+  "GET /" should {
+    "return 200" in {
+      val result = controller.hello()(fakeRequest)
+      status(result) shouldBe Status.OK
+    }
+  }
 }
