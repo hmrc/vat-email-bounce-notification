@@ -5,7 +5,7 @@
 
 This is the repository for VAT Email Bounce Notification
 
-This service receives invalid email address then processes the information to ETMP, which then updates the customer information to show it is an invalid email address. 
+This service receives invalid email addresses from event hub then sends the information to ETMP, which then updates the customer information to show it is an invalid email address. 
 
 ## Requirements
 
