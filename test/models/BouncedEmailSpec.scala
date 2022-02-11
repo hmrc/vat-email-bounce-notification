@@ -19,7 +19,6 @@ package models
 import common.BouncedEmailConstants.{bouncedEmailMaxJson, bouncedEmailMaxModel, bouncedEmailMinJson, bouncedEmailMinModel}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import play.api.libs.json.Json
 
 class BouncedEmailSpec extends AnyWordSpecLike with Matchers {
 
