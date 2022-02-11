@@ -33,16 +33,4 @@ class BouncedEmailEventSpec extends AnyWordSpecLike with Matchers {
       bouncedEmailEventMinJson.as[BouncedEmailEvent] shouldBe bouncedEmailEventMinModel
     }
   }
-
-  "BouncedEmailEvent Writes" should {
-
-    "serialize to Json successfully with all fields populated" in {
-      Json.toJson(bouncedEmailEventMaxModel) shouldBe bouncedEmailEventMaxJson
-    }
-
-    "serialize to Json successfully with no optional fields populated" in {
-      Json.toJson(bouncedEmailEventMinModel) shouldBe bouncedEmailEventMinJson
-    }
-  }
-
 }

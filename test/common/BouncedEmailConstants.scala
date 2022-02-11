@@ -17,7 +17,7 @@
 package common
 
 import common.BouncedEmailEventConstants.{bouncedEmailEventMaxModel, bouncedEmailEventMinModel}
-import models.{BouncedEmail, BouncedEmailEvent}
+import models.{BouncedEmail}
 import play.api.libs.json.{JsValue, Json}
 
 object BouncedEmailConstants {

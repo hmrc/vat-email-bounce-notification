@@ -17,7 +17,7 @@
 package models
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Reads, Writes}
+import play.api.libs.json.{JsPath, Reads}
 
 case class BouncedEmail(eventId: String,
                         groupId: Option[String],
@@ -36,11 +36,4 @@ object BouncedEmail {
     timestampPath.read[String] and
     eventPath.read[BouncedEmailEvent]
   )(BouncedEmail.apply _)
-
-  implicit val writes: Writes[BouncedEmail] = (
-    eventIdPath.write[String] and
-    groupIdPath.writeNullable[String] and
-    timestampPath.write[String] and
-    eventPath.write[BouncedEmailEvent]
-    )(unlift(BouncedEmail.unapply))
 }

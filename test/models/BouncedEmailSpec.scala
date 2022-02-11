@@ -33,15 +33,4 @@ class BouncedEmailSpec extends AnyWordSpecLike with Matchers {
       bouncedEmailMinJson.as[BouncedEmail] shouldBe bouncedEmailMinModel
     }
   }
-
-  "BouncedEmail Writes" should {
-
-    "serialize to Json successfully with all fields populated" in {
-      Json.toJson(bouncedEmailMaxModel) shouldBe bouncedEmailMaxJson
-    }
-
-    "serialize to Json successfully with no optional fields populated" in {
-      Json.toJson(bouncedEmailMinModel) shouldBe bouncedEmailMinJson
-    }
-  }
 }
