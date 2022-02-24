@@ -31,45 +31,42 @@ class BouncedEmailControllerSpec extends TestUtil {
 
   "The .process action" when {
 
-    "allowEventHubRequest feature switch is on" should {
+    "allowEventHubRequest feature switch is on and a valid JSON body is received" should {
 
-      "a valid JSON body is received" should {
-
-        "return 200" in {
-          mockAppConfig.features.allowEventHubRequest(true)
-          val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailMaxJson)
-          val result = controller.process(request)
-          status(result) shouldBe Status.OK
-        }
-      }
-
-      "an invalid JSON body is received" should {
-
-        "return 400" in {
-          val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), Json.obj("currency" -> "GBP"))
-          val result = controller.process(request)
-          status(result) shouldBe Status.BAD_REQUEST
-        }
-      }
-
-      "a request without JSON content is received" should {
-
-        "return 415" in {
-          val request = FakeRequest()
-          val result = controller.process(request)
-          status(result) shouldBe Status.UNSUPPORTED_MEDIA_TYPE
-        }
+      "return 200" in {
+        mockAppConfig.features.allowEventHubRequest(true)
+        val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailMaxJson)
+        val result = controller.process(request)
+        status(result) shouldBe Status.OK
       }
     }
 
-    "allowEventHubRequest feature switch is off" should {
+    "an invalid JSON body is received" should {
 
-      "return 503" in {
-        mockAppConfig.features.allowEventHubRequest(false)
-        val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailMaxJson)
+      "return 400" in {
+        val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), Json.obj("currency" -> "GBP"))
         val result = controller.process(request)
-        status(result) shouldBe Status.SERVICE_UNAVAILABLE
+        status(result) shouldBe Status.BAD_REQUEST
       }
+    }
+
+    "a request without JSON content is received" should {
+
+      "return 415" in {
+        val request = FakeRequest()
+        val result = controller.process(request)
+        status(result) shouldBe Status.UNSUPPORTED_MEDIA_TYPE
+      }
+    }
+  }
+
+  "allowEventHubRequest feature switch is off" should {
+
+    "return 503" in {
+      mockAppConfig.features.allowEventHubRequest(false)
+      val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailMaxJson)
+      val result = controller.process(request)
+      status(result) shouldBe Status.SERVICE_UNAVAILABLE
     }
   }
 }
