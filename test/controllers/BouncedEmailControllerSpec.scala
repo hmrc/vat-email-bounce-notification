@@ -31,9 +31,10 @@ class BouncedEmailControllerSpec extends TestUtil {
 
   "The .process action" when {
 
-    "a valid JSON body is received" should {
+    "allowEventHubRequest feature switch is on and a valid JSON body is received" should {
 
       "return 200" in {
+        mockAppConfig.features.allowEventHubRequest(true)
         val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailMaxJson)
         val result = controller.process(request)
         status(result) shouldBe Status.OK
@@ -56,6 +57,16 @@ class BouncedEmailControllerSpec extends TestUtil {
         val result = controller.process(request)
         status(result) shouldBe Status.UNSUPPORTED_MEDIA_TYPE
       }
+    }
+  }
+
+  "allowEventHubRequest feature switch is off" should {
+
+    "return 503" in {
+      mockAppConfig.features.allowEventHubRequest(false)
+      val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailMaxJson)
+      val result = controller.process(request)
+      status(result) shouldBe Status.SERVICE_UNAVAILABLE
     }
   }
 }

@@ -16,20 +16,24 @@
 
 package controllers
 
+import config.AppConfig
 import models.BouncedEmail
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton()
-class BouncedEmailController @Inject()(cc: ControllerComponents) extends BackendController(cc) {
+class BouncedEmailController @Inject()(cc: ControllerComponents)(implicit val appConfig: AppConfig) extends BackendController(cc) {
 
   def process: Action[JsValue] = Action.async(parse.json) { implicit request =>
-    withJsonBody[BouncedEmail] { _ =>
-      Future.successful(Ok)
+    if (appConfig.features.allowEventHubRequest()) {
+      withJsonBody[BouncedEmail] { _ =>
+        Future.successful(Ok)
+      }
+    } else {
+      Future.successful(ServiceUnavailable)
     }
   }
 }

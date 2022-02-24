@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package utils
+package config.featureSwitch
 
-import config.AppConfig
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.inject.Injector
+import play.api.Configuration
 
-trait TestUtil extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
+class Feature(val key: String)(implicit config: Configuration) {
 
-  lazy val injector: Injector = app.injector
-  implicit lazy val mockAppConfig: AppConfig = injector.instanceOf[AppConfig]
+  def apply(value: Boolean): Unit = sys.props += key -> value.toString
+
+  def apply(): Boolean = sys.props.get(key).fold(config.getOptional[Boolean](key).getOrElse(false))(_.toBoolean)
+
 }

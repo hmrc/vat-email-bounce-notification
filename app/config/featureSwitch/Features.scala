@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package utils
+package config.featureSwitch
 
-import config.AppConfig
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.inject.Injector
+import javax.inject.{Inject, Singleton}
+import play.api.Configuration
 
-trait TestUtil extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
+@Singleton
+class Features @Inject()(implicit config: Configuration){
 
-  lazy val injector: Injector = app.injector
-  implicit lazy val mockAppConfig: AppConfig = injector.instanceOf[AppConfig]
+  private val featureSwitch: String = "feature-switch"
+  lazy val allowEventHubRequest = new Feature(s"$featureSwitch.allowEventHubRequest")
+
 }
