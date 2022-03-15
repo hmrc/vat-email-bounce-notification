@@ -18,12 +18,11 @@ package models
 
 import play.api.libs.json._
 
-case class UpdateContactPrefRequest (identifierType : String,
-                                     identifier : String,
-                                     digitalChannel : Option[Boolean],
-                                     emailaddress : Option[String],
-                                     unusableStatus: Option[Boolean])
+case class UpdateContactPrefRequest(identifierType: String,
+                                    identifier: String,
+                                    emailaddress: Option[String],
+                                    unusableStatus: Option[Boolean])
 
 object UpdateContactPrefRequest {
-  implicit val format : Format[UpdateContactPrefRequest] = Json.format[UpdateContactPrefRequest]
+  implicit val format: Format[UpdateContactPrefRequest] = Json.format[UpdateContactPrefRequest]
 }
