@@ -17,7 +17,7 @@
 package common
 
 import common.BouncedEmailEventConstants.{bouncedEmailEventMaxModel, bouncedEmailEventMinModel}
-import models.{BouncedEmail}
+import models.{BouncedEmail, UpdateContactPrefRequest}
 import play.api.libs.json.{JsValue, Json}
 
 object BouncedEmailConstants {
@@ -53,4 +53,29 @@ object BouncedEmailConstants {
     )
   )
 
+  val updateContactPrefRequestMaxJson: JsValue = Json.obj(
+    "identifierType" -> "VATC",
+    "identifier" -> "123456789",
+    "emailaddress" -> "test@hrmc.gov.uk",
+    "unusableStatus" -> true
+  )
+
+  val updateContactPrefRequestMaxModel: UpdateContactPrefRequest = UpdateContactPrefRequest(
+    identifierType = "VATC",
+    identifier = "123456789",
+    emailaddress = Some("test@hrmc.gov.uk"),
+    unusableStatus = Some(true)
+  )
+
+  val updateContactPrefRequestMinJson: JsValue = Json.obj(
+    "identifierType" -> "VATC",
+    "identifier" -> "123456789"
+  )
+
+  val updateContactPrefRequestMinModel: UpdateContactPrefRequest = UpdateContactPrefRequest(
+    identifierType = "VATC",
+    identifier = "123456789",
+    emailaddress = None,
+    unusableStatus = None
+  )
 }
