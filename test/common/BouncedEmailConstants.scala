@@ -63,19 +63,7 @@ object BouncedEmailConstants {
   val updateContactPrefRequestMaxModel: UpdateContactPrefRequest = UpdateContactPrefRequest(
     identifierType = "VATC",
     identifier = "123456789",
-    emailaddress = Some("test@hrmc.gov.uk"),
-    unusableStatus = Some(true)
-  )
-
-  val updateContactPrefRequestMinJson: JsValue = Json.obj(
-    "identifierType" -> "VATC",
-    "identifier" -> "123456789"
-  )
-
-  val updateContactPrefRequestMinModel: UpdateContactPrefRequest = UpdateContactPrefRequest(
-    identifierType = "VATC",
-    identifier = "123456789",
-    emailaddress = None,
-    unusableStatus = None
+    emailaddress = "test@hrmc.gov.uk",
+    unusableStatus = true
   )
 }

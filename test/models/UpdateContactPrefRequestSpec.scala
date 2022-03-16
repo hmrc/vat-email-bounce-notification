@@ -23,20 +23,16 @@ import play.api.libs.json.Json
 
 class UpdateContactPrefRequestSpec extends AnyWordSpecLike with Matchers {
 
-  "parse the json correctly when all optional fields are populated" in {
-    updateContactPrefRequestMaxJson.as[UpdateContactPrefRequest] shouldBe updateContactPrefRequestMaxModel
-  }
+  "UpdateContactPrefRequest" should {
 
-  "parse the json correctly when no optional fields are populated" in {
-    updateContactPrefRequestMinJson.as[UpdateContactPrefRequest] shouldBe updateContactPrefRequestMinModel
-  }
+    "parse the json correctly" in {
+      updateContactPrefRequestMaxJson.as[UpdateContactPrefRequest] shouldBe updateContactPrefRequestMaxModel
+    }
 
-  "parse the model correctly to the json when all the optional fields are populated" in {
-    Json.toJson(updateContactPrefRequestMaxModel) shouldBe updateContactPrefRequestMaxJson
-  }
+    "parse the model correctly" in {
+      Json.toJson(updateContactPrefRequestMaxModel) shouldBe updateContactPrefRequestMaxJson
+    }
 
-  "parse the model correctly to the json when no optional fields are populated" in {
-    Json.toJson(updateContactPrefRequestMinModel) shouldBe updateContactPrefRequestMinJson
-  }
 
+  }
 }
