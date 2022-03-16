@@ -25,10 +25,6 @@ class UpdateContactPrefRequestSpec extends AnyWordSpecLike with Matchers {
 
   "UpdateContactPrefRequest" should {
 
-    "parse the json correctly" in {
-      updateContactPrefRequestMaxJson.as[UpdateContactPrefRequest] shouldBe updateContactPrefRequestMaxModel
-    }
-
     "parse the model correctly" in {
       Json.toJson(updateContactPrefRequestMaxModel) shouldBe updateContactPrefRequestMaxJson
     }
