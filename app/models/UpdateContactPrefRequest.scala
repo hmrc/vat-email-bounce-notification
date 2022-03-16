@@ -24,5 +24,5 @@ case class UpdateContactPrefRequest(identifierType: String,
                                     unusableStatus: Boolean)
 
 object UpdateContactPrefRequest {
-  implicit val format: Format[UpdateContactPrefRequest] = Json.format[UpdateContactPrefRequest]
+  implicit val writes: Writes[UpdateContactPrefRequest] = Json.format[UpdateContactPrefRequest]
 }
