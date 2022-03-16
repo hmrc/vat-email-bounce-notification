@@ -20,9 +20,9 @@ import play.api.libs.json._
 
 case class UpdateContactPrefRequest(identifierType: String,
                                     identifier: String,
-                                    emailaddress: Option[String],
-                                    unusableStatus: Option[Boolean])
+                                    emailaddress: String,
+                                    unusableStatus: Boolean)
 
 object UpdateContactPrefRequest {
-  implicit val format: Format[UpdateContactPrefRequest] = Json.format[UpdateContactPrefRequest]
+  implicit val writes: Writes[UpdateContactPrefRequest] = Json.writes[UpdateContactPrefRequest]
 }
