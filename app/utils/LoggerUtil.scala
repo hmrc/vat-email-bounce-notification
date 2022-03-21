@@ -14,29 +14,11 @@
  * limitations under the License.
  */
 
-package common
+package utils
 
-import models.BouncedEmailEvent
-import play.api.libs.json.{JsValue, Json}
+import org.slf4j.{Logger, LoggerFactory}
+import play.api.LoggerLike
 
-object BouncedEmailEventConstants {
-
-  val bouncedEmailEventMinModel: BouncedEmailEvent = BouncedEmailEvent(
-    None,
-    None
-  )
-
-  val bouncedEmailEventMaxModel: BouncedEmailEvent = BouncedEmailEvent(
-    Some("123@abc.com"),
-    Some("HMRC-MTD-VAT~VRN~GB123456789")
-  )
-
-  val bouncedEmailEventMinJson: JsValue = Json.obj()
-
-  val bouncedEmailEventMaxJson: JsValue = Json.obj(
-    "emailAddress" -> "123@abc.com",
-    "enrolment" -> "HMRC-MTD-VAT~VRN~GB123456789"
-  )
-
-
+trait LoggerUtil extends LoggerLike {
+  override val logger: Logger = LoggerFactory.getLogger("application")
 }

@@ -17,18 +17,18 @@
 package controllers
 
 import common.BouncedEmailConstants.bouncedEmailMaxJson
+import mocks.services.MockUpdateContactPrefService
 import play.api.Play.materializer
 import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.mvc.Headers
 import play.api.test.Helpers._
-import play.api.test.{FakeRequest, Helpers}
+import play.api.test.{FakeRequest}
 import utils.TestUtil
 
-class BouncedEmailControllerSpec extends TestUtil {
+class BouncedEmailControllerSpec extends TestUtil with MockUpdateContactPrefService {
 
-  private val controller = new BouncedEmailController(Helpers.stubControllerComponents())
-
+  private val controller = new BouncedEmailController(controllerComponents, mockUpdateContactPrefService)(mockAppConfig,ec)
   "The .process action" when {
 
     "allowEventHubRequest feature switch is on and a valid JSON body is received" should {
@@ -36,7 +36,7 @@ class BouncedEmailControllerSpec extends TestUtil {
       "return 200" in {
         mockAppConfig.features.allowEventHubRequest(true)
         val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailMaxJson)
-        val result = controller.process(request)
+        lazy val result = controller.process(request)
         status(result) shouldBe Status.OK
       }
     }

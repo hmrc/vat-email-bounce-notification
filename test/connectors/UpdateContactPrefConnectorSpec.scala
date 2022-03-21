@@ -16,6 +16,7 @@
 
 package connectors
 
+import common.BouncedEmailConstants.updateContactPrefRequestMaxModel
 import models.UpdateContactPrefResponse
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import utils.TestUtil
@@ -27,7 +28,7 @@ class UpdateContactPrefConnectorSpec extends TestUtil {
   "The .updateContactPref function" should {
 
     "return a static UpdateContactPrefResponse model" in {
-      await(connector.updateContactPref()) shouldBe UpdateContactPrefResponse("2020-01-01T09:00:00Z", "OK")
+      await(connector.updateContactPref(updateContactPrefRequestMaxModel)) shouldBe Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z", "OK"))
     }
   }
 }

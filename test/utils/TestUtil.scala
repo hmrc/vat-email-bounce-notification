@@ -17,13 +17,27 @@
 package utils
 
 import config.AppConfig
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.inject.Injector
+import play.api.mvc.ControllerComponents
+import play.api.test.Helpers.stubControllerComponents
+import uk.gov.hmrc.http.HeaderCarrier
 
-trait TestUtil extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
+import scala.concurrent.ExecutionContext
+
+trait TestUtil extends AnyWordSpec with Matchers with GuiceOneAppPerSuite with MockitoSugar
+  with BeforeAndAfterAll with BeforeAndAfterEach {
 
   lazy val injector: Injector = app.injector
   implicit lazy val mockAppConfig: AppConfig = injector.instanceOf[AppConfig]
+
+  implicit lazy val hc: HeaderCarrier = HeaderCarrier()
+  implicit lazy val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
+
+  val controllerComponents: ControllerComponents = stubControllerComponents()
+
 }
