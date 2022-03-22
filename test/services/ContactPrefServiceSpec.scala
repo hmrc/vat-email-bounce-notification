@@ -16,11 +16,10 @@
 
 package services
 
-import common.BouncedEmailConstants.{bouncedEmailMaxModel, updateContactPrefRequestMaxModel}
-import models.{UpdateContactPrefRequest, UpdateContactPrefResponse}
+import common.BouncedEmailConstants.{bouncedEmailInvalidVRNModel, bouncedEmailMaxModel, bouncedEmailMaxModelNoEmail, updateContactPrefRequestMaxModel}
+import models.UpdateContactPrefResponse
 import utils.TestUtil
 import mocks.connectors.MockUpdateContactPrefConnector
-import mocks.services.MockUpdateContactPrefService
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
 
@@ -33,9 +32,29 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
     "the connector returns a success response" should {
 
       "return the same response" in {
-        val successResponse : UpdateContactPrefResponse = UpdateContactPrefResponse("2020-01-01T09:00:00Z","OK")
+        val successResponse : Option[UpdateContactPrefResponse] = Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z","OK"))
+        setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
         val actual = await(service.updateContactPref(bouncedEmailMaxModel)(hc, ec))
 
+        actual shouldBe successResponse
+      }
+
+    }
+    "the connector returns an error when no email is provided" should {
+
+      "return the same response" in {
+        val successResponse: Option[UpdateContactPrefResponse] = None
+        setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
+        val actual = await(service.updateContactPref(bouncedEmailMaxModelNoEmail)(hc, ec))
+        actual shouldBe successResponse
+      }
+    }
+    "The connector returns an error when an incorrect vrn is matched" should {
+
+      "return the same response" in {
+        val successResponse: Option[UpdateContactPrefResponse] = None
+        setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
+        val actual = await(service.updateContactPref(bouncedEmailInvalidVRNModel)(hc, ec))
         actual shouldBe successResponse
       }
 

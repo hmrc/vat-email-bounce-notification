@@ -23,7 +23,7 @@ import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.mvc.Headers
 import play.api.test.Helpers._
-import play.api.test.{FakeRequest}
+import play.api.test.FakeRequest
 import utils.TestUtil
 
 class BouncedEmailControllerSpec extends TestUtil with MockUpdateContactPrefService {

@@ -34,7 +34,7 @@ trait MockUpdateContactPrefConnector extends TestUtil{
 
     when(
       mockUpdateContactPrefConnector.updateContactPref(
-        ArgumentMatchers.eq(model)
+       ArgumentMatchers.any()
       )
     ).thenReturn(Future.successful(response))
 
