@@ -19,16 +19,15 @@ package services
 import com.google.inject.Inject
 import connectors.UpdateContactPrefConnector
 import models.{BouncedEmail, UpdateContactPrefRequest, UpdateContactPrefResponse}
-import uk.gov.hmrc.http.HeaderCarrier
 import utils.LoggerUtil
 
-import scala.concurrent.{ExecutionContext, Future}
-
+import scala.concurrent.Future
 
 class ContactPrefService @Inject()(connector: UpdateContactPrefConnector) extends LoggerUtil {
 
-  def updateContactPref(request : BouncedEmail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[UpdateContactPrefResponse]] = {
-    val vrn = request.event.enrolment.getOrElse("").takeRight(9)
+  def updateContactPref(request : BouncedEmail): Future[Option[UpdateContactPrefResponse]] = {
+    val charsToKeep = 9
+    val vrn = request.event.enrolment.getOrElse("").takeRight(charsToKeep)
     val vrnRegex = """\d{9}"""
 
     (vrn.matches(vrnRegex), request.event.emailAddress) match {
@@ -41,9 +40,5 @@ class ContactPrefService @Inject()(connector: UpdateContactPrefConnector) extend
         Future.successful(None)
 
     }
-
-
-
   }
-
 }

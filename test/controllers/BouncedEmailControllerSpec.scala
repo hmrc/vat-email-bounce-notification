@@ -16,8 +16,9 @@
 
 package controllers
 
-import common.BouncedEmailConstants.bouncedEmailMaxJson
+import common.BouncedEmailConstants.{bouncedEmailMaxJson, bouncedEmailMaxModel, bouncedEmailMinJson, bouncedEmailMinModel}
 import mocks.services.MockUpdateContactPrefService
+import models.UpdateContactPrefResponse
 import play.api.Play.materializer
 import play.api.http.Status
 import play.api.libs.json.Json
@@ -36,6 +37,7 @@ class BouncedEmailControllerSpec extends TestUtil with MockUpdateContactPrefServ
       "return 200" in {
         mockAppConfig.features.allowEventHubRequest(true)
         val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailMaxJson)
+        setupUpdateContactPrefService(bouncedEmailMaxModel)(Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z", "OK")))
         lazy val result = controller.process(request)
         status(result) shouldBe Status.OK
       }
@@ -48,6 +50,17 @@ class BouncedEmailControllerSpec extends TestUtil with MockUpdateContactPrefServ
         val result = controller.process(request)
         status(result) shouldBe Status.BAD_REQUEST
       }
+    }
+    "No email address is provided or group id" should {
+
+      "return a 304" in {
+        mockAppConfig.features.allowEventHubRequest(true)
+        val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailMinJson)
+        setupUpdateContactPrefService(bouncedEmailMinModel)(None)
+        lazy val result = controller.process(request)
+        status(result) shouldBe Status.NOT_MODIFIED
+      }
+
     }
 
     "a request without JSON content is received" should {

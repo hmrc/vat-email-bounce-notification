@@ -34,7 +34,7 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
       "return the same response" in {
         val successResponse : Option[UpdateContactPrefResponse] = Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z","OK"))
         setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
-        val actual = await(service.updateContactPref(bouncedEmailMaxModel)(hc, ec))
+        val actual = await(service.updateContactPref(bouncedEmailMaxModel))
 
         actual shouldBe successResponse
       }
@@ -45,7 +45,7 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
       "return the same response" in {
         val successResponse: Option[UpdateContactPrefResponse] = None
         setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
-        val actual = await(service.updateContactPref(bouncedEmailMaxModelNoEmail)(hc, ec))
+        val actual = await(service.updateContactPref(bouncedEmailMaxModelNoEmail))
         actual shouldBe successResponse
       }
     }
@@ -54,7 +54,7 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
       "return the same response" in {
         val successResponse: Option[UpdateContactPrefResponse] = None
         setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
-        val actual = await(service.updateContactPref(bouncedEmailInvalidVRNModel)(hc, ec))
+        val actual = await(service.updateContactPref(bouncedEmailInvalidVRNModel))
         actual shouldBe successResponse
       }
 
