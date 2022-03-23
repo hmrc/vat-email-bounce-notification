@@ -51,7 +51,7 @@ class BouncedEmailControllerSpec extends TestUtil with MockUpdateContactPrefServ
         status(result) shouldBe Status.BAD_REQUEST
       }
     }
-    "No email address is provided or group id" should {
+    "a valid json body is received but fails to update" should {
 
       "return a 304" in {
         mockAppConfig.features.allowEventHubRequest(true)
