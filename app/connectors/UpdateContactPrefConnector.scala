@@ -16,14 +16,14 @@
 
 package connectors
 
-import models.UpdateContactPrefResponse
-
+import models.{UpdateContactPrefRequest, UpdateContactPrefResponse}
 import javax.inject.Singleton
+
 import scala.concurrent.Future
 
 @Singleton
 class UpdateContactPrefConnector {
 
-  def updateContactPref(): Future[UpdateContactPrefResponse] =
-    Future.successful(UpdateContactPrefResponse("2020-01-01T09:00:00Z", "OK"))
+  def updateContactPref(model: UpdateContactPrefRequest): Future[Option[UpdateContactPrefResponse]] =
+    Future.successful(Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z", "OK")))
 }

@@ -31,10 +31,22 @@ object BouncedEmailEventConstants {
     Some("HMRC-MTD-VAT~VRN~GB123456789")
   )
 
+  val bouncedEmailEventInvalidVRNModel: BouncedEmailEvent = BouncedEmailEvent(
+    Some("123@abc.com"),
+    Some("HMRC-MTD-VAT~VRN~GB12345P789")
+  )
+
+  val bouncedEmailEventModelNoEmail: BouncedEmailEvent = BouncedEmailEvent(
+    None,
+    Some("HMRC-MTD-VAT~VRN~GB123456789")
+  )
+
   val bouncedEmailEventMinJson: JsValue = Json.obj()
 
   val bouncedEmailEventMaxJson: JsValue = Json.obj(
     "emailAddress" -> "123@abc.com",
     "enrolment" -> "HMRC-MTD-VAT~VRN~GB123456789"
   )
+
+
 }

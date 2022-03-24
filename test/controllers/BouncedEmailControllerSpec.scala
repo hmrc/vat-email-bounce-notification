@@ -16,19 +16,20 @@
 
 package controllers
 
-import common.BouncedEmailConstants.bouncedEmailMaxJson
+import common.BouncedEmailConstants.{bouncedEmailMaxJson, bouncedEmailMaxModel, bouncedEmailMinJson, bouncedEmailMinModel}
+import mocks.services.MockUpdateContactPrefService
+import models.UpdateContactPrefResponse
 import play.api.Play.materializer
 import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.mvc.Headers
 import play.api.test.Helpers._
-import play.api.test.{FakeRequest, Helpers}
+import play.api.test.FakeRequest
 import utils.TestUtil
 
-class BouncedEmailControllerSpec extends TestUtil {
+class BouncedEmailControllerSpec extends TestUtil with MockUpdateContactPrefService {
 
-  private val controller = new BouncedEmailController(Helpers.stubControllerComponents())
-
+  private val controller = new BouncedEmailController(controllerComponents, mockUpdateContactPrefService)(mockAppConfig,ec)
   "The .process action" when {
 
     "allowEventHubRequest feature switch is on and a valid JSON body is received" should {
@@ -36,7 +37,8 @@ class BouncedEmailControllerSpec extends TestUtil {
       "return 200" in {
         mockAppConfig.features.allowEventHubRequest(true)
         val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailMaxJson)
-        val result = controller.process(request)
+        setupUpdateContactPrefService(bouncedEmailMaxModel)(Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z", "OK")))
+        lazy val result = controller.process(request)
         status(result) shouldBe Status.OK
       }
     }
@@ -48,6 +50,17 @@ class BouncedEmailControllerSpec extends TestUtil {
         val result = controller.process(request)
         status(result) shouldBe Status.BAD_REQUEST
       }
+    }
+    "a valid json body is received but fails to update" should {
+
+      "return a 304" in {
+        mockAppConfig.features.allowEventHubRequest(true)
+        val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailMinJson)
+        setupUpdateContactPrefService(bouncedEmailMinModel)(None)
+        lazy val result = controller.process(request)
+        status(result) shouldBe Status.NOT_MODIFIED
+      }
+
     }
 
     "a request without JSON content is received" should {

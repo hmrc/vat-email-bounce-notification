@@ -22,15 +22,23 @@ import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import javax.inject.{Inject, Singleton}
+import services.ContactPrefService
+import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
+
+
 @Singleton()
-class BouncedEmailController @Inject()(cc: ControllerComponents)(implicit val appConfig: AppConfig) extends BackendController(cc) {
+class BouncedEmailController @Inject()(cc: ControllerComponents, contactPrefService: ContactPrefService)
+                                      (implicit val appConfig: AppConfig, ec: ExecutionContext) extends BackendController(cc) {
 
   def process: Action[JsValue] = Action.async(parse.json) { implicit request =>
     if (appConfig.features.allowEventHubRequest()) {
-      withJsonBody[BouncedEmail] { _ =>
-        Future.successful(Ok)
+      withJsonBody[BouncedEmail] { emailRequestModel =>
+        contactPrefService.updateContactPref(emailRequestModel).map{
+          case Some(_) => Ok
+          case None => NotModified
+        }
       }
     } else {
       Future.successful(ServiceUnavailable)
