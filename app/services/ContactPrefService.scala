@@ -36,7 +36,7 @@ class ContactPrefService @Inject()(connector: UpdateContactPrefConnector) extend
         connector.updateContactPref(requestModel)
       case(true, None) => logger.warn("[ContactPrefService][updateContactPref] no email address provided")
         Future.successful(None)
-      case _ => logger.warn("[ContactPrefService][updateContactPref] failed to validate VRN")
+      case _ => logger.warn(s"[ContactPrefService][updateContactPref] failed to validate vrn - $vrn")
         Future.successful(None)
 
     }
