@@ -22,11 +22,13 @@ object AppDependencies {
     "uk.gov.hmrc"             %% "bootstrap-backend-play-28"  % "5.20.0"
   )
 
+  val testScope = "test,it"
+
   val test = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-test-play-28"     % "5.20.0"             % Test,
-    "com.vladsch.flexmark"    %  "flexmark-all"               % "0.36.8"             % "test, it",
-    "org.mockito"             % "mockito-core"                % "3.2.0"              % Test,
-    "com.github.tomakehurst"  % "wiremock-jre8"               % "2.26.3"             % Test,
-    "org.scalatestplus"       %% "scalatestplus-mockito"      % "1.0.0-M2"           % Test
+    "uk.gov.hmrc"             %% "bootstrap-test-play-28"     % "5.20.0"             % testScope,
+    "com.vladsch.flexmark"    %  "flexmark-all"               % "0.36.8"             % testScope,
+    "org.mockito"             % "mockito-core"                % "3.2.0"              % testScope,
+    "com.github.tomakehurst"  % "wiremock-jre8"               % "2.26.3"             % testScope,
+    "org.scalatestplus"       %% "scalatestplus-mockito"      % "1.0.0-M2"           % testScope
   )
 }
