@@ -32,7 +32,7 @@ class UpdateContactPrefConnectorISpec extends IntegrationBaseSpec {
 
     "return an UpdateContactPrefResponse model" when {
 
-      s"an $OK response is received and an UpdateContactPrefResponse response model can be parsed" in {
+      s"an $OK response is received and an UpdateContactPrefResponse model can be parsed" in {
 
         stubPutRequest(url, OK, updateContactPrefResponseJson.toString())
 
@@ -46,22 +46,27 @@ class UpdateContactPrefConnectorISpec extends IntegrationBaseSpec {
     }
     "return a None" when {
 
-      s"an $OK response is received from financial transactions but the response cannot be parsed" in {
+      s"an $OK response is received but the response cannot be parsed" in {
+
         stubPutRequest(url, OK, """{"foo":"bar"}""")
+
         val expectedValue = None
 
-        val result : Option[UpdateContactPrefResponse] =
-          await(connector.updateContactPref(updateContactPrefRequestMaxModel))
-          result shouldBe expectedValue
-        }
-      "an unexpected response is received from EIS" in {
-        stubPutRequest(url, BAD_REQUEST, Json.obj("code" -> 400,
-          "reason" -> "BAD REQUEST").toString())
-        val expectedValue = None
-        val result : Option[UpdateContactPrefResponse] =
+        val result: Option[UpdateContactPrefResponse] =
           await(connector.updateContactPref(updateContactPrefRequestMaxModel))
         result shouldBe expectedValue
       }
+      "an unexpected responses is received from EIS" in {
+
+        stubPutRequest(url, BAD_REQUEST, Json.obj("code" -> 400,
+          "reason" -> "BAD REQUEST").toString())
+
+        val expectedValue = None
+
+        val result: Option[UpdateContactPrefResponse] =
+          await(connector.updateContactPref(updateContactPrefRequestMaxModel))
+        result shouldBe expectedValue
       }
     }
+  }
 }
