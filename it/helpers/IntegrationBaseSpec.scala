@@ -16,6 +16,9 @@
 
 package helpers
 
+import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, put, stubFor}
+import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import config.AppConfig
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
@@ -25,7 +28,7 @@ import play.api.libs.json.JsValue
 import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.{Application, Environment, Mode}
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import scala.concurrent.ExecutionContext
 
@@ -34,14 +37,27 @@ trait IntegrationBaseSpec extends AnyWordSpecLike with Matchers with GuiceOneSer
 
   val mockHost: String = WireMockHelper.host
   val mockPort: String = WireMockHelper.wireMockPort.toString
+  val mockUrl = s"http://$mockHost:$mockPort"
   val appRouteContext: String = "/vat-email-bounce-notification"
-
   lazy val client: WSClient = app.injector.instanceOf[WSClient]
+  val httpClient: HttpClient = app.injector.instanceOf[HttpClient]
+  val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
   implicit val ec: ExecutionContext = ExecutionContext.global
 
-  def servicesConfig: Map[String, String] = Map()
+  def servicesConfig: Map[String, String] = Map(
+    "microservice.services.auth.host" -> mockHost,
+    "microservice.services.auth.port" -> mockPort,
+    "microservice.services.eis.url" -> mockUrl
+  )
+
+  def stubPutRequest(url: String, returnStatus: Int, returnBody: String): StubMapping =
+    stubFor(put(url).willReturn(
+      aResponse()
+        .withStatus(returnStatus)
+        .withBody(returnBody)
+    ))
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
     .in(Environment.simple(mode = Mode.Dev))
@@ -63,4 +79,8 @@ trait IntegrationBaseSpec extends AnyWordSpecLike with Matchers with GuiceOneSer
       .withHttpHeaders("Content-Type" -> "application/json")
       .post(body)
   )
+
+
+
+
 }
