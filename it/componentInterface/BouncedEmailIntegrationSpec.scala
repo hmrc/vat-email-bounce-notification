@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers
+package componentInterface
 
 import connectors.UpdateContactPrefConnector
 import helpers.IntegrationBaseSpec
