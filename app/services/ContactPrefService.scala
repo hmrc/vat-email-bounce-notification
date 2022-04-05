@@ -19,9 +19,9 @@ package services
 import com.google.inject.Inject
 import connectors.UpdateContactPrefConnector
 import models.{BouncedEmail, UpdateContactPrefRequest, UpdateContactPrefResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 import utils.LoggerUtil
-
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class ContactPrefService @Inject()(connector: UpdateContactPrefConnector) extends LoggerUtil {
 
@@ -33,7 +33,7 @@ class ContactPrefService @Inject()(connector: UpdateContactPrefConnector) extend
     (vrn.matches(vrnRegex), request.event.emailAddress) match {
       case (true,Some(email)) => val requestModel : UpdateContactPrefRequest =
         UpdateContactPrefRequest(identifier = vrn, identifierType = "VRN", emailaddress = email, unusableStatus = true)
-        connector.updateContactPref(requestModel)
+        connector.updateContactPref(requestModel)(HeaderCarrier(), ExecutionContext.Implicits.global)
       case(true, None) => logger.warn("[ContactPrefService][updateContactPref] no email address provided")
         Future.successful(None)
       case _ => logger.warn(s"[ContactPrefService][updateContactPref] failed to validate vrn - $vrn")

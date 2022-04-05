@@ -16,14 +16,33 @@
 
 package connectors
 
+import config.AppConfig
 import models.{UpdateContactPrefRequest, UpdateContactPrefResponse}
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import utils.LoggerUtil
+import java.util.UUID.randomUUID
 
-import scala.concurrent.Future
+import connectors.httpParsers.UpdateContactPrefHttpParser.UpdateContactPrefReads
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UpdateContactPrefConnector {
+class UpdateContactPrefConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends LoggerUtil {
 
-  def updateContactPref(model: UpdateContactPrefRequest): Future[Option[UpdateContactPrefResponse]] =
-    Future.successful(Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z", "OK")))
+private[connectors] def updateContactPrefUrl() = s"${appConfig.eisUrl}/income-tax/customer/VATC/contact-preference"
+
+  def updateContactPref(model: UpdateContactPrefRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[UpdateContactPrefResponse]] = {
+
+    val eisHeaders = Seq("Authorization" -> s"Bearer ${appConfig.eisToken}","CorrelationId" -> randomUUID().toString, "Environment" -> appConfig.eisUrl)
+
+    val url = updateContactPrefUrl()
+
+    logger.debug(s"[UpdateContactPrefConnector][updateContactPref] - Calling PUT $url \nHeaders: $eisHeaders")
+    http.PUT(url, model)(implicitly, UpdateContactPrefReads, hc, ec)
+
+  }
+
+
 }
+

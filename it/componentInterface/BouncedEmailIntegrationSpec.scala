@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package componentInterface
 
+import connectors.UpdateContactPrefConnector
 import helpers.IntegrationBaseSpec
 import play.api.http.Status
+import play.api.http.Status.OK
 import play.api.libs.json.Json
+import testData.UpdateContactPrefConstants.updateContactPrefResponseJson
 
 class BouncedEmailIntegrationSpec extends IntegrationBaseSpec {
 
   val path = "/process-bounce"
+  val connector: UpdateContactPrefConnector = new UpdateContactPrefConnector(httpClient, appConfig)
+  val url = "/income-tax/customer/VATC/contact-preference"
 
   s"Sending a valid JSON request to $path" should {
 
@@ -38,7 +43,7 @@ class BouncedEmailIntegrationSpec extends IntegrationBaseSpec {
         )
       )
 
-      // TODO add stub call for connector
+      stubPutRequest(url, OK, updateContactPrefResponseJson.toString())
 
       val result = post(path)(json)
 

@@ -19,9 +19,14 @@ package config
 import config.featureSwitch.Features
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
-class AppConfig @Inject()(implicit val conf: Configuration) {
+class AppConfig @Inject()(val servicesConfig: ServicesConfig)(implicit val conf: Configuration) {
 
   lazy val features = new Features
+
+  lazy val eisEnvironment: String = servicesConfig.getString("microservice.services.eis.environment")
+  lazy val eisToken: String = servicesConfig.getString("microservice.services.eis.auth-token")
+  lazy val eisUrl: String = servicesConfig.getString("microservice.services.eis.url")
 }
