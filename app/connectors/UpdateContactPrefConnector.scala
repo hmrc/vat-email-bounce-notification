@@ -38,7 +38,7 @@ private[connectors] def updateContactPrefUrl() = s"${appConfig.eisUrl}/income-ta
 
     val url = updateContactPrefUrl()
 
-    logger.debug(s"[UpdateContactPrefConnector][updateContactPref] - Calling PUT $url \nHeaders: $desHeaders")
+    logger.debug(s"[UpdateContactPrefConnector][updateContactPref] - Calling PUT $url \nHeaders: $eisHeaders")
     http.PUT(url, model)(implicitly, UpdateContactPrefReads, hc, ec)
 
   }
