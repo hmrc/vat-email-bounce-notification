@@ -34,12 +34,12 @@ private[connectors] def updateContactPrefUrl() = s"${appConfig.eisUrl}/income-ta
 
   def updateContactPref(model: UpdateContactPrefRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[UpdateContactPrefResponse]] = {
 
-    val eisHeaders = Seq("Authorization" -> s"Bearer ${appConfig.eisToken}","CorrelationId" -> randomUUID().toString, "Environment" -> appConfig.eisUrl)
+    val eisHeaders = Seq("Authorization" -> s"Bearer ${appConfig.eisToken}","CorrelationId" -> randomUUID().toString, "Environment" -> appConfig.eisEnvironment)
 
     val url = updateContactPrefUrl()
 
     logger.debug(s"[UpdateContactPrefConnector][updateContactPref] - Calling PUT $url \nHeaders: $eisHeaders")
-    http.PUT(url, model)(implicitly, UpdateContactPrefReads, hc, ec)
+    http.PUT(url, model, eisHeaders)(implicitly, UpdateContactPrefReads, hc, ec)
 
   }
 
