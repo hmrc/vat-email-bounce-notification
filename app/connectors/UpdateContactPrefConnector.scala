@@ -34,7 +34,7 @@ private[connectors] def updateContactPrefUrl() = s"${appConfig.eisUrl}/income-ta
 
   def updateContactPref(model: UpdateContactPrefRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[UpdateContactPrefResponse]] = {
 
-    val desHeaders = Seq("Authorization" -> s"Bearer ${appConfig.eisToken}","CorrelationId" -> randomUUID().toString, "Environment" -> appConfig.eisUrl)
+    val eisHeaders = Seq("Authorization" -> s"Bearer ${appConfig.eisToken}","CorrelationId" -> randomUUID().toString, "Environment" -> appConfig.eisUrl)
 
     val url = updateContactPrefUrl()
 
