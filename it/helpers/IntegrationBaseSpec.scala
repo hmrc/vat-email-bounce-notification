@@ -44,7 +44,7 @@ trait IntegrationBaseSpec extends AnyWordSpecLike with Matchers with GuiceOneSer
   val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
-  implicit val ec: ExecutionContext = ExecutionContext.global
+  implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
   def servicesConfig: Map[String, String] = Map(
     "microservice.services.auth.host" -> mockHost,
