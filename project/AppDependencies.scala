@@ -19,16 +19,14 @@ import sbt._
 object AppDependencies {
 
   val compile = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-backend-play-28"  % "5.20.0"
+    "uk.gov.hmrc"             %% "bootstrap-backend-play-28"  % "5.21.0"
   )
 
   val testScope = "test,it"
 
   val test = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-test-play-28"     % "5.20.0"             % testScope,
-    "com.vladsch.flexmark"    %  "flexmark-all"               % "0.36.8"             % testScope,
-    "org.mockito"             % "mockito-core"                % "3.2.0"              % testScope,
-    "com.github.tomakehurst"  % "wiremock-jre8"               % "2.26.3"             % testScope,
-    "org.scalatestplus"       %% "scalatestplus-mockito"      % "1.0.0-M2"           % testScope
+    "uk.gov.hmrc"             %% "bootstrap-test-play-28"     % "5.21.0"            % testScope,
+    "com.github.tomakehurst"  %  "wiremock-jre8"              % "2.26.3"            % testScope,
+    "org.scalatestplus"       %% "mockito-3-4"                % "3.2.3.0"           % testScope
   )
 }

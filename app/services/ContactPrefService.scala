@@ -23,7 +23,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.LoggerUtil
 import scala.concurrent.{ExecutionContext, Future}
 
-class ContactPrefService @Inject()(connector: UpdateContactPrefConnector) extends LoggerUtil {
+class ContactPrefService @Inject()(connector: UpdateContactPrefConnector)
+                                  (implicit ec: ExecutionContext) extends LoggerUtil {
 
   def updateContactPref(request : BouncedEmail): Future[Option[UpdateContactPrefResponse]] = {
     val charsToKeep = 9
@@ -33,7 +34,7 @@ class ContactPrefService @Inject()(connector: UpdateContactPrefConnector) extend
     (vrn.matches(vrnRegex), request.event.emailAddress) match {
       case (true,Some(email)) => val requestModel : UpdateContactPrefRequest =
         UpdateContactPrefRequest(identifier = vrn, identifierType = "VRN", emailaddress = email, unusableStatus = true)
-        connector.updateContactPref(requestModel)(HeaderCarrier(), ExecutionContext.Implicits.global)
+        connector.updateContactPref(requestModel)(HeaderCarrier(), ec)
       case(true, None) => logger.warn("[ContactPrefService][updateContactPref] no email address provided")
         Future.successful(None)
       case _ => logger.warn(s"[ContactPrefService][updateContactPref] failed to validate vrn - $vrn")
