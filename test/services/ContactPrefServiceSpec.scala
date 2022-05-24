@@ -16,7 +16,7 @@
 
 package services
 
-import common.BouncedEmailConstants.{bouncedEmailInvalidVRNModel, bouncedEmailMaxModel, bouncedEmailMaxModelNoEmail, updateContactPrefRequestMaxModel}
+import common.BouncedEmailConstants.{bouncedEmailInvalidEventTypeModel, bouncedEmailInvalidVRNModel, bouncedEmailMaxModel, bouncedEmailMaxModelNoEmail, updateContactPrefRequestMaxModel}
 import models.UpdateContactPrefResponse
 import utils.TestUtil
 import mocks.connectors.MockUpdateContactPrefConnector
@@ -58,6 +58,16 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
         actual shouldBe successResponse
       }
 
+    }
+
+    "an invalid event type is provided" should {
+
+      "return None" in {
+        val errorResponse: Option[UpdateContactPrefResponse] = None
+        setupUpdateContactPref(updateContactPrefRequestMaxModel)(errorResponse)
+        val actual = await(service.updateContactPref(bouncedEmailInvalidEventTypeModel))
+        actual shouldBe errorResponse
+      }
     }
 
   }
