@@ -21,7 +21,7 @@ import play.api.libs.json.{JsPath, Reads}
 
 case class BouncedEmailEvent(emailAddress: Option[String],
                              enrolment: Option[String],
-                             event: Option[String])
+                             event: Option[ValidEventTypeEnum.Value])
 
 object BouncedEmailEvent {
   private val emailAddressPath = JsPath \ "emailAddress"
@@ -31,10 +31,6 @@ object BouncedEmailEvent {
   implicit val reads: Reads[BouncedEmailEvent] = (
     emailAddressPath.readNullable[String] and
     enrolmentPath.readNullable[String] and
-    eventPath.readNullable[String]
+    eventPath.readNullable[ValidEventTypeEnum.Value]
     )(BouncedEmailEvent.apply _)
-
-  def isValidEventType(eventType: String): Boolean = {
-    Set("PermanentBounce", "TemporaryBounce", "Rejected").contains(eventType)
-  }
 }

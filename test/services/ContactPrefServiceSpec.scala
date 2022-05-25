@@ -16,7 +16,7 @@
 
 package services
 
-import common.BouncedEmailConstants.{bouncedEmailInvalidEventTypeModel, bouncedEmailInvalidVRNModel, bouncedEmailMaxModel, bouncedEmailMaxModelNoEmail, updateContactPrefRequestMaxModel}
+import common.BouncedEmailConstants._
 import models.UpdateContactPrefResponse
 import utils.TestUtil
 import mocks.connectors.MockUpdateContactPrefConnector
@@ -29,17 +29,42 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
 
     val service = new ContactPrefService(mockUpdateContactPrefConnector)
 
-    "the connector returns a success response" should {
+    "the connector returns a success response" when {
 
-      "return the same response" in {
-        val successResponse : Option[UpdateContactPrefResponse] = Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z","OK"))
-        setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
-        val actual = await(service.updateContactPref(bouncedEmailMaxModel))
+      "a permanent bounce event is processed" should {
 
-        actual shouldBe successResponse
+        "return the same response" in {
+          val successResponse : Option[UpdateContactPrefResponse] = Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z","OK"))
+          setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
+          val actual = await(service.updateContactPref(bouncedEmailMaxModel))
+
+          actual shouldBe successResponse
+        }
       }
 
+      "a temporary bounce event is processed" should {
+
+        "return the same response" in {
+          val successResponse : Option[UpdateContactPrefResponse] = Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z","OK"))
+          setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
+          val actual = await(service.updateContactPref(bouncedEmailTemporaryBounceModel))
+
+          actual shouldBe successResponse
+        }
+      }
+
+      "a rejected event is processed" should {
+
+        "return the same response" in {
+          val successResponse : Option[UpdateContactPrefResponse] = Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z","OK"))
+          setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
+          val actual = await(service.updateContactPref(bouncedEmailRejectedModel))
+
+          actual shouldBe successResponse
+        }
+      }
     }
+
     "the connector returns an error when no email is provided" should {
 
       "return the same response" in {
@@ -57,19 +82,6 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
         val actual = await(service.updateContactPref(bouncedEmailInvalidVRNModel))
         actual shouldBe successResponse
       }
-
     }
-
-    "an invalid event type is provided" should {
-
-      "return None" in {
-        val errorResponse: Option[UpdateContactPrefResponse] = None
-        setupUpdateContactPref(updateContactPrefRequestMaxModel)(errorResponse)
-        val actual = await(service.updateContactPref(bouncedEmailInvalidEventTypeModel))
-        actual shouldBe errorResponse
-      }
-    }
-
   }
-
 }

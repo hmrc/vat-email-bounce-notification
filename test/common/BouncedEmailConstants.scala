@@ -16,7 +16,7 @@
 
 package common
 
-import common.BouncedEmailEventConstants.{bouncedEmailEventInvalidEventTypeModel, bouncedEmailEventInvalidVRNModel, bouncedEmailEventMaxModel, bouncedEmailEventMinModel, bouncedEmailEventModelNoEmail}
+import common.BouncedEmailEventConstants._
 import models.{BouncedEmail, UpdateContactPrefRequest}
 import play.api.libs.json.{JsValue, Json}
 
@@ -34,6 +34,20 @@ object BouncedEmailConstants {
     Some("some-group-id"),
     "2021-04-07T09:46:29+00:00",
     bouncedEmailEventMaxModel
+  )
+
+  val bouncedEmailTemporaryBounceModel: BouncedEmail = BouncedEmail(
+    "some-event-id",
+    Some("some-group-id"),
+    "2021-04-07T09:46:29+00:00",
+    bouncedEmailEventTemporaryBouncedModel
+  )
+
+  val bouncedEmailRejectedModel: BouncedEmail = BouncedEmail(
+    "some-event-id",
+    Some("some-group-id"),
+    "2021-04-07T09:46:29+00:00",
+    bouncedEmailEventRejectedModel
   )
 
   val bouncedEmailMaxModelNoEmail: BouncedEmail = BouncedEmail(

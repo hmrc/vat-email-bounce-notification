@@ -18,7 +18,7 @@ package services
 
 import com.google.inject.Inject
 import connectors.UpdateContactPrefConnector
-import models.{BouncedEmail, BouncedEmailEvent, UpdateContactPrefRequest, UpdateContactPrefResponse}
+import models.{BouncedEmail, UpdateContactPrefRequest, UpdateContactPrefResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.LoggerUtil
 
@@ -32,13 +32,11 @@ class ContactPrefService @Inject()(connector: UpdateContactPrefConnector)
     val vrn = request.event.enrolment.getOrElse("").takeRight(charsToKeep)
     val vrnRegex = """\d{9}"""
 
-    (vrn.matches(vrnRegex), request.event.emailAddress, BouncedEmailEvent.isValidEventType(request.event.event.getOrElse(""))) match {
-      case (_, _, false) => logger.warn("[ContactPrefService][updateContactPref] Invalid event type provided")
-        Future.successful(None)
-      case (true,Some(email), _) => val requestModel : UpdateContactPrefRequest =
+    (vrn.matches(vrnRegex), request.event.emailAddress) match {
+      case (true,Some(email)) => val requestModel : UpdateContactPrefRequest =
         UpdateContactPrefRequest(identifier = vrn, identifierType = "VRN", emailaddress = email, unusableStatus = true)
         connector.updateContactPref(requestModel)(HeaderCarrier(), ec)
-      case(true, None, _) => logger.warn("[ContactPrefService][updateContactPref] no email address provided")
+      case(true, None) => logger.warn("[ContactPrefService][updateContactPref] no email address provided")
         Future.successful(None)
       case _ => logger.warn(s"[ContactPrefService][updateContactPref] failed to validate vrn - $vrn")
         Future.successful(None)
