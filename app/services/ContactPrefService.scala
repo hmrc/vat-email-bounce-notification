@@ -21,6 +21,7 @@ import connectors.UpdateContactPrefConnector
 import models.{BouncedEmail, UpdateContactPrefRequest, UpdateContactPrefResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.LoggerUtil
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class ContactPrefService @Inject()(connector: UpdateContactPrefConnector)

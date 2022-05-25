@@ -17,36 +17,59 @@
 package common
 
 import models.BouncedEmailEvent
+import models.ValidEventTypeEnum.{permanentBounce, rejected, temporaryBounce}
 import play.api.libs.json.{JsValue, Json}
 
 object BouncedEmailEventConstants {
 
   val bouncedEmailEventMinModel: BouncedEmailEvent = BouncedEmailEvent(
     None,
-    None
+    None,
+    Some(permanentBounce)
   )
 
   val bouncedEmailEventMaxModel: BouncedEmailEvent = BouncedEmailEvent(
     Some("123@abc.com"),
-    Some("HMRC-MTD-VAT~VRN~GB123456789")
+    Some("HMRC-MTD-VAT~VRN~GB123456789"),
+    Some(permanentBounce)
+  )
+
+  val bouncedEmailEventTemporaryBouncedModel: BouncedEmailEvent = BouncedEmailEvent(
+    Some("123@abc.com"),
+    Some("HMRC-MTD-VAT~VRN~GB123456789"),
+    Some(temporaryBounce)
+  )
+
+  val bouncedEmailEventRejectedModel: BouncedEmailEvent = BouncedEmailEvent(
+    Some("123@abc.com"),
+    Some("HMRC-MTD-VAT~VRN~GB123456789"),
+    Some(rejected)
   )
 
   val bouncedEmailEventInvalidVRNModel: BouncedEmailEvent = BouncedEmailEvent(
     Some("123@abc.com"),
-    Some("HMRC-MTD-VAT~VRN~GB12345P789")
+    Some("HMRC-MTD-VAT~VRN~GB12345P789"),
+    Some(permanentBounce)
   )
 
   val bouncedEmailEventModelNoEmail: BouncedEmailEvent = BouncedEmailEvent(
     None,
-    Some("HMRC-MTD-VAT~VRN~GB123456789")
+    Some("HMRC-MTD-VAT~VRN~GB123456789"),
+    Some(permanentBounce)
   )
 
-  val bouncedEmailEventMinJson: JsValue = Json.obj()
+  val bouncedEmailEventInvalidEventTypeModel: BouncedEmailEvent = BouncedEmailEvent(
+    Some("123@abc.com"),
+    Some("HMRC-MTD-VAT~VRN~GB123456789"),
+    Some(permanentBounce)
+  )
+
+  val bouncedEmailEventMinJson: JsValue = Json.obj("event" -> "PermanentBounce")
 
   val bouncedEmailEventMaxJson: JsValue = Json.obj(
     "emailAddress" -> "123@abc.com",
-    "enrolment" -> "HMRC-MTD-VAT~VRN~GB123456789"
+    "enrolment" -> "HMRC-MTD-VAT~VRN~GB123456789",
+    "event" -> "PermanentBounce"
   )
-
 
 }

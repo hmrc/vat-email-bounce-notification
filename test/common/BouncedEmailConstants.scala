@@ -16,7 +16,7 @@
 
 package common
 
-import common.BouncedEmailEventConstants.{bouncedEmailEventInvalidVRNModel, bouncedEmailEventMaxModel, bouncedEmailEventMinModel, bouncedEmailEventModelNoEmail}
+import common.BouncedEmailEventConstants._
 import models.{BouncedEmail, UpdateContactPrefRequest}
 import play.api.libs.json.{JsValue, Json}
 
@@ -36,6 +36,20 @@ object BouncedEmailConstants {
     bouncedEmailEventMaxModel
   )
 
+  val bouncedEmailTemporaryBounceModel: BouncedEmail = BouncedEmail(
+    "some-event-id",
+    Some("some-group-id"),
+    "2021-04-07T09:46:29+00:00",
+    bouncedEmailEventTemporaryBouncedModel
+  )
+
+  val bouncedEmailRejectedModel: BouncedEmail = BouncedEmail(
+    "some-event-id",
+    Some("some-group-id"),
+    "2021-04-07T09:46:29+00:00",
+    bouncedEmailEventRejectedModel
+  )
+
   val bouncedEmailMaxModelNoEmail: BouncedEmail = BouncedEmail(
     "some-event-id",
     Some("some-group-id"),
@@ -50,10 +64,18 @@ object BouncedEmailConstants {
     bouncedEmailEventInvalidVRNModel
   )
 
+  val bouncedEmailInvalidEventTypeModel: BouncedEmail = BouncedEmail(
+    "some-event-id",
+    Some("some-group-id"),
+    "2021-04-07T09:46:29+00:00",
+    bouncedEmailEventInvalidEventTypeModel
+  )
+
   val bouncedEmailMinJson: JsValue = Json.obj(
     "eventId" -> "some-event-id",
     "timestamp" -> "2021-04-07T09:46:29+00:00",
     "event" -> Json.obj(
+      "event" -> "PermanentBounce"
     )
   )
 
@@ -63,7 +85,8 @@ object BouncedEmailConstants {
     "timestamp" -> "2021-04-07T09:46:29+00:00",
     "event" -> Json.obj(
       "emailAddress" -> "123@abc.com",
-      "enrolment" -> "HMRC-MTD-VAT~VRN~GB123456789"
+      "enrolment" -> "HMRC-MTD-VAT~VRN~GB123456789",
+      "event" -> "PermanentBounce"
     )
   )
 
