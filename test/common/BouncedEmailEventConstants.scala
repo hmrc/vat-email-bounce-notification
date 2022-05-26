@@ -48,7 +48,9 @@ object BouncedEmailEventConstants {
 
   val bouncedEmailEventPermanentBounceJson: JsValue = Json.obj(
     "emailAddress" -> "123@abc.com",
-    "enrolment" -> "HMRC-MTD-VAT~VRN~GB123456789",
+    "tags" -> Json.obj(
+      "enrolment" -> "HMRC-MTD-VAT~VRN~GB123456789"
+    ),
     "event" -> "PermanentBounce"
   )
 

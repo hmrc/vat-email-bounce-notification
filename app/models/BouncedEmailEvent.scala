@@ -25,7 +25,7 @@ case class BouncedEmailEvent(emailAddress: String,
 
 object BouncedEmailEvent {
   private val emailAddressPath = JsPath \ "emailAddress"
-  private val enrolmentPath = JsPath \ "enrolment"
+  private val enrolmentPath = JsPath \ "tags" \ "enrolment"
   private val eventPath = JsPath \ "event"
 
   implicit val reads: Reads[BouncedEmailEvent] = (
