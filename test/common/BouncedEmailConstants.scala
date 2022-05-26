@@ -22,25 +22,18 @@ import play.api.libs.json.{JsValue, Json}
 
 object BouncedEmailConstants {
 
-  val bouncedEmailMinModel: BouncedEmail = BouncedEmail(
-    "some-event-id",
-    None,
-    "2021-04-07T09:46:29+00:00",
-    bouncedEmailEventMinModel
-  )
-
-  val bouncedEmailMaxModel: BouncedEmail = BouncedEmail(
+  val bouncedEmailPermanentBounceModel: BouncedEmail = BouncedEmail(
     "some-event-id",
     Some("some-group-id"),
     "2021-04-07T09:46:29+00:00",
-    bouncedEmailEventMaxModel
+    bouncedEmailEventPermanentBounceModel
   )
 
   val bouncedEmailTemporaryBounceModel: BouncedEmail = BouncedEmail(
     "some-event-id",
     Some("some-group-id"),
     "2021-04-07T09:46:29+00:00",
-    bouncedEmailEventTemporaryBouncedModel
+    bouncedEmailEventTemporaryBounceModel
   )
 
   val bouncedEmailRejectedModel: BouncedEmail = BouncedEmail(
@@ -50,13 +43,6 @@ object BouncedEmailConstants {
     bouncedEmailEventRejectedModel
   )
 
-  val bouncedEmailMaxModelNoEmail: BouncedEmail = BouncedEmail(
-    "some-event-id",
-    Some("some-group-id"),
-    "2021-04-07T09:46:29+00:00",
-    bouncedEmailEventModelNoEmail
-  )
-
   val bouncedEmailInvalidVRNModel: BouncedEmail = BouncedEmail(
     "some-event-id",
     Some("some-group-id"),
@@ -64,28 +50,24 @@ object BouncedEmailConstants {
     bouncedEmailEventInvalidVRNModel
   )
 
-  val bouncedEmailInvalidEventTypeModel: BouncedEmail = BouncedEmail(
-    "some-event-id",
-    Some("some-group-id"),
-    "2021-04-07T09:46:29+00:00",
-    bouncedEmailEventInvalidEventTypeModel
-  )
-
-  val bouncedEmailMinJson: JsValue = Json.obj(
-    "eventId" -> "some-event-id",
-    "timestamp" -> "2021-04-07T09:46:29+00:00",
-    "event" -> Json.obj(
-      "event" -> "PermanentBounce"
-    )
-  )
-
-  val bouncedEmailMaxJson: JsValue = Json.obj(
+  val bouncedEmailPermanentBounceJson: JsValue = Json.obj(
     "eventId" -> "some-event-id",
     "groupId" -> "some-group-id",
     "timestamp" -> "2021-04-07T09:46:29+00:00",
     "event" -> Json.obj(
       "emailAddress" -> "123@abc.com",
       "enrolment" -> "HMRC-MTD-VAT~VRN~GB123456789",
+      "event" -> "PermanentBounce"
+    )
+  )
+
+  val bouncedEmailInvalidVRNJson: JsValue = Json.obj(
+    "eventId" -> "some-event-id",
+    "groupId" -> "some-group-id",
+    "timestamp" -> "2021-04-07T09:46:29+00:00",
+    "event" -> Json.obj(
+      "emailAddress" -> "123@abc.com",
+      "enrolment" -> "HMRC-MTD-VAT~VRN~GB12345P789",
       "event" -> "PermanentBounce"
     )
   )

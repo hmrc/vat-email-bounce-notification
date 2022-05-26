@@ -19,9 +19,9 @@ package models
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Reads}
 
-case class BouncedEmailEvent(emailAddress: Option[String],
-                             enrolment: Option[String],
-                             event: Option[ValidEventTypeEnum.Value])
+case class BouncedEmailEvent(emailAddress: String,
+                             enrolment: String,
+                             event: ValidEventTypeEnum.Value)
 
 object BouncedEmailEvent {
   private val emailAddressPath = JsPath \ "emailAddress"
@@ -29,8 +29,8 @@ object BouncedEmailEvent {
   private val eventPath = JsPath \ "event"
 
   implicit val reads: Reads[BouncedEmailEvent] = (
-    emailAddressPath.readNullable[String] and
-    enrolmentPath.readNullable[String] and
-    eventPath.readNullable[ValidEventTypeEnum.Value]
+    emailAddressPath.read[String] and
+    enrolmentPath.read[String] and
+    eventPath.read[ValidEventTypeEnum.Value]
     )(BouncedEmailEvent.apply _)
 }

@@ -36,7 +36,7 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
         "return the same response" in {
           val successResponse : Option[UpdateContactPrefResponse] = Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z","OK"))
           setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
-          val actual = await(service.updateContactPref(bouncedEmailMaxModel))
+          val actual = await(service.updateContactPref(bouncedEmailPermanentBounceModel))
 
           actual shouldBe successResponse
         }
@@ -65,22 +65,22 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
       }
     }
 
-    "the connector returns an error when no email is provided" should {
+    "The connector returns None" should {
 
-      "return the same response" in {
-        val successResponse: Option[UpdateContactPrefResponse] = None
-        setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
-        val actual = await(service.updateContactPref(bouncedEmailMaxModelNoEmail))
-        actual shouldBe successResponse
+      "return None" in {
+        val errorResponse: Option[UpdateContactPrefResponse] = None
+        setupUpdateContactPref(updateContactPrefRequestMaxModel)(errorResponse)
+        val actual = await(service.updateContactPref(bouncedEmailPermanentBounceModel))
+        actual shouldBe errorResponse
       }
     }
-    "The connector returns an error when an incorrect vrn is matched" should {
 
-      "return the same response" in {
-        val successResponse: Option[UpdateContactPrefResponse] = None
-        setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
+    "an event with an invalid vrn is processed" should {
+
+      "return None" in {
+        val errorResponse: Option[UpdateContactPrefResponse] = None
         val actual = await(service.updateContactPref(bouncedEmailInvalidVRNModel))
-        actual shouldBe successResponse
+        actual shouldBe errorResponse
       }
     }
   }
