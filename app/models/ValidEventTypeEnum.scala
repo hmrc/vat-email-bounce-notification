@@ -24,15 +24,12 @@ object ValidEventTypeEnum extends Enumeration {
   val temporaryBounce: ValidEventTypeEnum.Value = Value("TemporaryBounce")
   val rejected: ValidEventTypeEnum.Value = Value("Rejected")
 
-  implicit val reads: Reads[ValidEventTypeEnum.Value] = new Reads[ValidEventTypeEnum.Value] {
-
-    implicit def reads(json: JsValue): JsResult[ValidEventTypeEnum.Value] = {
-      json.as[String].toUpperCase match {
-        case "PERMANENTBOUNCE" => JsSuccess(permanentBounce)
-        case "TEMPORARYBOUNCE" => JsSuccess(temporaryBounce)
-        case "REJECTED" => JsSuccess(rejected)
-        case e => JsError(s"$e not recognised")
-      }
+  implicit val reads: Reads[ValidEventTypeEnum.Value] = (json: JsValue) => {
+    json.as[String].toUpperCase match {
+      case "PERMANENTBOUNCE" => JsSuccess(permanentBounce)
+      case "TEMPORARYBOUNCE" => JsSuccess(temporaryBounce)
+      case "REJECTED" => JsSuccess(rejected)
+      case e => JsError(s"$e not recognised")
     }
   }
 
