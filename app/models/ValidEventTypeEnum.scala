@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{Format, JsError, JsResult, JsString, JsSuccess, JsValue}
+import play.api.libs.json.{JsError, JsSuccess, JsValue, Reads}
 
 object ValidEventTypeEnum extends Enumeration {
 
@@ -24,18 +24,12 @@ object ValidEventTypeEnum extends Enumeration {
   val temporaryBounce: ValidEventTypeEnum.Value = Value("TemporaryBounce")
   val rejected: ValidEventTypeEnum.Value = Value("Rejected")
 
-  implicit val format: Format[ValidEventTypeEnum.Value] = new Format[ValidEventTypeEnum.Value] {
-    override def writes(enumValue: ValidEventTypeEnum.Value): JsValue = {
-      JsString(enumValue.toString.toUpperCase)
-    }
-
-    override def reads(json: JsValue): JsResult[ValidEventTypeEnum.Value] = {
-      json.as[String].toUpperCase match {
-        case "PERMANENTBOUNCE" => JsSuccess(permanentBounce)
-        case "TEMPORARYBOUNCE" => JsSuccess(temporaryBounce)
-        case "REJECTED" => JsSuccess(rejected)
-        case e => JsError(s"$e not recognised")
-      }
+  implicit val reads: Reads[ValidEventTypeEnum.Value] = (json: JsValue) => {
+    json.as[String].toUpperCase match {
+      case "PERMANENTBOUNCE" => JsSuccess(permanentBounce)
+      case "TEMPORARYBOUNCE" => JsSuccess(temporaryBounce)
+      case "REJECTED" => JsSuccess(rejected)
+      case e => JsError(s"$e not recognised")
     }
   }
 

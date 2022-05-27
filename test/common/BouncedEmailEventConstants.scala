@@ -22,53 +22,35 @@ import play.api.libs.json.{JsValue, Json}
 
 object BouncedEmailEventConstants {
 
-  val bouncedEmailEventMinModel: BouncedEmailEvent = BouncedEmailEvent(
-    None,
-    None,
-    Some(permanentBounce)
+  val bouncedEmailEventPermanentBounceModel: BouncedEmailEvent = BouncedEmailEvent(
+    "123@abc.com",
+    "HMRC-MTD-VAT~VRN~GB123456789",
+    permanentBounce
   )
 
-  val bouncedEmailEventMaxModel: BouncedEmailEvent = BouncedEmailEvent(
-    Some("123@abc.com"),
-    Some("HMRC-MTD-VAT~VRN~GB123456789"),
-    Some(permanentBounce)
-  )
-
-  val bouncedEmailEventTemporaryBouncedModel: BouncedEmailEvent = BouncedEmailEvent(
-    Some("123@abc.com"),
-    Some("HMRC-MTD-VAT~VRN~GB123456789"),
-    Some(temporaryBounce)
+  val bouncedEmailEventTemporaryBounceModel: BouncedEmailEvent = BouncedEmailEvent(
+    "123@abc.com",
+    "HMRC-MTD-VAT~VRN~GB123456789",
+    temporaryBounce
   )
 
   val bouncedEmailEventRejectedModel: BouncedEmailEvent = BouncedEmailEvent(
-    Some("123@abc.com"),
-    Some("HMRC-MTD-VAT~VRN~GB123456789"),
-    Some(rejected)
+    "123@abc.com",
+    "HMRC-MTD-VAT~VRN~GB123456789",
+    rejected
   )
 
   val bouncedEmailEventInvalidVRNModel: BouncedEmailEvent = BouncedEmailEvent(
-    Some("123@abc.com"),
-    Some("HMRC-MTD-VAT~VRN~GB12345P789"),
-    Some(permanentBounce)
+    "123@abc.com",
+    "HMRC-MTD-VAT~VRN~GB12345P789",
+    permanentBounce
   )
 
-  val bouncedEmailEventModelNoEmail: BouncedEmailEvent = BouncedEmailEvent(
-    None,
-    Some("HMRC-MTD-VAT~VRN~GB123456789"),
-    Some(permanentBounce)
-  )
-
-  val bouncedEmailEventInvalidEventTypeModel: BouncedEmailEvent = BouncedEmailEvent(
-    Some("123@abc.com"),
-    Some("HMRC-MTD-VAT~VRN~GB123456789"),
-    Some(permanentBounce)
-  )
-
-  val bouncedEmailEventMinJson: JsValue = Json.obj("event" -> "PermanentBounce")
-
-  val bouncedEmailEventMaxJson: JsValue = Json.obj(
+  val bouncedEmailEventPermanentBounceJson: JsValue = Json.obj(
     "emailAddress" -> "123@abc.com",
-    "enrolment" -> "HMRC-MTD-VAT~VRN~GB123456789",
+    "tags" -> Json.obj(
+      "enrolment" -> "HMRC-MTD-VAT~VRN~GB123456789"
+    ),
     "event" -> "PermanentBounce"
   )
 

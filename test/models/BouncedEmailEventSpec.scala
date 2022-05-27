@@ -16,7 +16,7 @@
 
 package models
 
-import common.BouncedEmailEventConstants.{bouncedEmailEventMaxJson, bouncedEmailEventMaxModel, bouncedEmailEventMinJson, bouncedEmailEventMinModel}
+import common.BouncedEmailEventConstants.{bouncedEmailEventPermanentBounceJson, bouncedEmailEventPermanentBounceModel}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -24,12 +24,8 @@ class BouncedEmailEventSpec extends AnyWordSpecLike with Matchers {
 
   "BouncedEmailEvent Reads" should {
 
-    "parse the json correctly when all optional fields are populated" in {
-      bouncedEmailEventMaxJson.as[BouncedEmailEvent] shouldBe bouncedEmailEventMaxModel
-    }
-
-    "parse the json correctly when no optional fields are populated" in {
-      bouncedEmailEventMinJson.as[BouncedEmailEvent] shouldBe bouncedEmailEventMinModel
+    "parse the json correctly when all fields are populated" in {
+      bouncedEmailEventPermanentBounceJson.as[BouncedEmailEvent] shouldBe bouncedEmailEventPermanentBounceModel
     }
   }
 }

@@ -23,38 +23,23 @@ class ValidEventTypeEnumSpec extends TestUtil {
 
   "The enum" should {
 
-    "be writable to JSON for PermanentBounce" in {
-      val result = Json.toJson(ValidEventTypeEnum.permanentBounce)
-      result shouldBe JsString("PERMANENTBOUNCE")
-    }
-
-    "be writable to JSON for TemporaryBounce" in {
-      val result = Json.toJson(ValidEventTypeEnum.temporaryBounce)
-      result shouldBe JsString("TEMPORARYBOUNCE")
-    }
-
-    "be writable to JSON for Rejected" in {
-      val result = Json.toJson(ValidEventTypeEnum.rejected)
-      result shouldBe JsString("REJECTED")
-    }
-
-    "be readable for JSON for PermanentBounce" in {
-      val result = Json.fromJson(JsString("PERMANENTBOUNCE"))(ValidEventTypeEnum.format)
+    "be readable from JSON for PermanentBounce" in {
+      val result = Json.fromJson(JsString("PERMANENTBOUNCE"))(ValidEventTypeEnum.reads)
       result.get shouldBe ValidEventTypeEnum.permanentBounce
     }
 
-    "be readable for JSON for TemporaryBounce" in {
-      val result = Json.fromJson(JsString("TEMPORARYBOUNCE"))(ValidEventTypeEnum.format)
+    "be readable from JSON for TemporaryBounce" in {
+      val result = Json.fromJson(JsString("TEMPORARYBOUNCE"))(ValidEventTypeEnum.reads)
       result.get shouldBe ValidEventTypeEnum.temporaryBounce
     }
 
-    "be readable for JSON for Rejected" in {
-      val result = Json.fromJson(JsString("REJECTED"))(ValidEventTypeEnum.format)
+    "be readable from JSON for Rejected" in {
+      val result = Json.fromJson(JsString("REJECTED"))(ValidEventTypeEnum.reads)
       result.get shouldBe ValidEventTypeEnum.rejected
     }
 
     "return JsError when the enum is not readable" in {
-      val result = Json.fromJson(JsString("unknown"))(ValidEventTypeEnum.format)
+      val result = Json.fromJson(JsString("unknown"))(ValidEventTypeEnum.reads)
       result.isError shouldBe true
     }
   }

@@ -29,15 +29,14 @@ class ContactPrefService @Inject()(connector: UpdateContactPrefConnector)
 
   def updateContactPref(request : BouncedEmail): Future[Option[UpdateContactPrefResponse]] = {
     val charsToKeep = 9
-    val vrn = request.event.enrolment.getOrElse("").takeRight(charsToKeep)
+    val vrn = request.event.enrolment.takeRight(charsToKeep)
+    val email =request.event.emailAddress
     val vrnRegex = """\d{9}"""
 
-    (vrn.matches(vrnRegex), request.event.emailAddress) match {
-      case (true,Some(email)) => val requestModel : UpdateContactPrefRequest =
+    vrn.matches(vrnRegex) match {
+      case true => val requestModel : UpdateContactPrefRequest =
         UpdateContactPrefRequest(identifier = vrn, identifierType = "VRN", emailaddress = email, unusableStatus = true)
         connector.updateContactPref(requestModel)(HeaderCarrier(), ec)
-      case(true, None) => logger.warn("[ContactPrefService][updateContactPref] no email address provided")
-        Future.successful(None)
       case _ => logger.warn(s"[ContactPrefService][updateContactPref] failed to validate vrn - $vrn")
         Future.successful(None)
 

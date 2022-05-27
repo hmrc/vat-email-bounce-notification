@@ -16,7 +16,7 @@
 
 package controllers
 
-import common.BouncedEmailConstants.{bouncedEmailMaxJson, bouncedEmailMaxModel, bouncedEmailMinJson, bouncedEmailMinModel}
+import common.BouncedEmailConstants.{bouncedEmailInvalidVRNJson, bouncedEmailInvalidVRNModel, bouncedEmailPermanentBounceJson, bouncedEmailPermanentBounceModel}
 import mocks.services.MockUpdateContactPrefService
 import models.UpdateContactPrefResponse
 import play.api.Play.materializer
@@ -36,8 +36,8 @@ class BouncedEmailControllerSpec extends TestUtil with MockUpdateContactPrefServ
 
       "return 200" in {
         mockAppConfig.features.allowEventHubRequest(true)
-        val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailMaxJson)
-        setupUpdateContactPrefService(bouncedEmailMaxModel)(Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z", "OK")))
+        val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailPermanentBounceJson)
+        setupUpdateContactPrefService(bouncedEmailPermanentBounceModel)(Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z", "OK")))
         lazy val result = controller.process(request)
         status(result) shouldBe Status.OK
       }
@@ -55,8 +55,8 @@ class BouncedEmailControllerSpec extends TestUtil with MockUpdateContactPrefServ
 
       "return a 304" in {
         mockAppConfig.features.allowEventHubRequest(true)
-        val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailMinJson)
-        setupUpdateContactPrefService(bouncedEmailMinModel)(None)
+        val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailInvalidVRNJson)
+        setupUpdateContactPrefService(bouncedEmailInvalidVRNModel)(None)
         lazy val result = controller.process(request)
         status(result) shouldBe Status.NOT_MODIFIED
       }
@@ -77,7 +77,7 @@ class BouncedEmailControllerSpec extends TestUtil with MockUpdateContactPrefServ
 
     "return 503" in {
       mockAppConfig.features.allowEventHubRequest(false)
-      val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailMaxJson)
+      val request = FakeRequest("POST", "/", Headers((CONTENT_TYPE, JSON)), bouncedEmailPermanentBounceJson)
       val result = controller.process(request)
       status(result) shouldBe Status.SERVICE_UNAVAILABLE
     }
