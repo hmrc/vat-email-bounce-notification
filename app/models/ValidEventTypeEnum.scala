@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{JsError, JsResult, JsSuccess, JsValue, Reads}
+import play.api.libs.json.{JsError, JsSuccess, JsValue, Reads}
 
 object ValidEventTypeEnum extends Enumeration {
 
