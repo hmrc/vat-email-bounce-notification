@@ -18,11 +18,12 @@ package connectors
 
 import config.AppConfig
 import models.{UpdateContactPrefRequest, UpdateContactPrefResponse}
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import utils.LoggerUtil
-import java.util.UUID.randomUUID
 
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpException}
+import utils.LoggerUtil
+
+import java.util.UUID.randomUUID
 import connectors.httpParsers.UpdateContactPrefHttpParser.UpdateContactPrefReads
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,15 +35,16 @@ private[connectors] def updateContactPrefUrl() = s"${appConfig.eisUrl}/income-ta
 
   def updateContactPref(model: UpdateContactPrefRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[UpdateContactPrefResponse]] = {
 
-    val eisHeaders = Seq("Authorization" -> s"Bearer ${appConfig.eisToken}","CorrelationId" -> randomUUID().toString, "Environment" -> appConfig.eisEnvironment)
+    val eisHeaders = Seq("Authorization" -> s"Bearer ${appConfig.eisToken}", "CorrelationId" -> randomUUID().toString, "Environment" -> appConfig.eisEnvironment)
 
     val url = updateContactPrefUrl()
 
     logger.debug(s"[UpdateContactPrefConnector][updateContactPref] - Calling PUT $url \nHeaders: $eisHeaders")
-    http.PUT(url, model, eisHeaders)(implicitly, UpdateContactPrefReads, hc, ec)
-
+    http.PUT(url, model, eisHeaders)(implicitly, UpdateContactPrefReads, hc, ec).recover {
+      case ex: HttpException =>
+        logger.warn(s"[UpdateContactPrefConnector][updateContactPref] - HTTP exception received: ${ex.message}")
+        None
+    }
   }
-
-
 }
 

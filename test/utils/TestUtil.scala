@@ -25,7 +25,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.inject.Injector
 import play.api.mvc.ControllerComponents
 import play.api.test.Helpers.stubControllerComponents
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import scala.concurrent.ExecutionContext
 
@@ -37,6 +37,7 @@ trait TestUtil extends AnyWordSpec with Matchers with GuiceOneAppPerSuite with M
 
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
   implicit lazy val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
+  implicit lazy val mockHttp: HttpClient = mock[HttpClient]
 
   val controllerComponents: ControllerComponents = stubControllerComponents()
 
