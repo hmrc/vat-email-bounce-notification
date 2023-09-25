@@ -21,8 +21,11 @@ import models.BouncedEmail
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+
 import javax.inject.{Inject, Singleton}
 import services.ContactPrefService
+import uk.gov.hmrc.http.HeaderCarrier
+
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
@@ -30,7 +33,8 @@ import scala.concurrent.Future
 
 @Singleton()
 class BouncedEmailController @Inject()(cc: ControllerComponents, contactPrefService: ContactPrefService)
-                                      (implicit val appConfig: AppConfig, ec: ExecutionContext) extends BackendController(cc) {
+                                      (implicit val appConfig: AppConfig, ec: ExecutionContext)
+  extends BackendController(cc) {
 
   def process: Action[JsValue] = Action.async(parse.json) { implicit request =>
     if (appConfig.features.allowEventHubRequest()) {

@@ -24,18 +24,40 @@ import utils.LoggerUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ContactPrefService @Inject()(connector: UpdateContactPrefConnector)
+class ContactPrefService @Inject()(connector: UpdateContactPrefConnector,
+                                   auditService: AuditService)
                                   (implicit ec: ExecutionContext) extends LoggerUtil {
 
-  def updateContactPref(request : BouncedEmail): Future[Option[UpdateContactPrefResponse]] = {
+  def updateContactPref(request : BouncedEmail)(implicit headerCarrier: HeaderCarrier): Future[Option[UpdateContactPrefResponse]] = {
+
     val charsToKeep = 9
-    val vrn = request.event.enrolment.takeRight(charsToKeep)
+    val noSpaces = request.event.enrolment.replace(" ", "")
+    val vrn = noSpaces.takeRight(charsToKeep)
     val email =request.event.emailAddress
     val vrnRegex = """\d{9}"""
+
+    val data = Map[String, String](elems =
+      "retrievedEventId" -> request.eventId,
+      "retrievedGroupId" -> request.groupId.getOrElse(""),
+      "retrievedTimestamp" -> request.timestamp,
+      "retrievedEmailAddress" -> request.event.emailAddress,
+      "retrievedEnrolment" -> request.event.enrolment,
+      "retrievedEvent" -> request.event.event.toString,
+      "attemptedIdentifier" -> vrn,
+      "attemptedEmail" -> email
+    )
+
+    auditService.sendAuditEvent("BouncedEmailData", data)
 
     vrn.matches(vrnRegex) match {
       case true => val requestModel : UpdateContactPrefRequest =
         UpdateContactPrefRequest(identifier = vrn, identifierType = "VRN", emailaddress = email, unusableStatus = true)
+        val sentData = Map[String, String](elems =
+          "identifier" -> vrn,
+          "identifierType" -> "VRN",
+          "emailAddress" -> email,
+          "unstableStatus" -> "true"
+        )
         connector.updateContactPref(requestModel)(HeaderCarrier(), ec)
       case _ => logger.warn(s"[ContactPrefService][updateContactPref] failed to validate vrn - $vrn")
         Future.successful(None)

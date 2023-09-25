@@ -36,6 +36,13 @@ object BouncedEmailConstants {
     bouncedEmailEventTemporaryBounceModel
   )
 
+  val bouncedEmailTemporaryBounceModelWithSpacesVRN: BouncedEmail = BouncedEmail(
+    "some-event-id",
+    Some("some-group-id"),
+    "2021-04-07T09:46:29+00:00",
+    bouncedEmailEventTemporaryBounceModelWithSpacesVrn
+  )
+
   val bouncedEmailRejectedModel: BouncedEmail = BouncedEmail(
     "some-event-id",
     Some("some-group-id"),
