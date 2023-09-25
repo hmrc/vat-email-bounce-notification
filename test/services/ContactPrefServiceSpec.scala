@@ -20,14 +20,21 @@ import common.BouncedEmailConstants._
 import models.UpdateContactPrefResponse
 import utils.TestUtil
 import mocks.connectors.MockUpdateContactPrefConnector
+import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.verify
+import org.mockito.internal.verification.VerificationModeFactory.times
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import uk.gov.hmrc.http.HeaderCarrier
 
 
 class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnector{
 
+  val mockAuditService: AuditService = mock[AuditService]
+
   "The .updateContactPref method" when {
 
-    val service = new ContactPrefService(mockUpdateContactPrefConnector)
+    val service = new ContactPrefService(mockUpdateContactPrefConnector, mockAuditService)
 
     "the connector returns a success response" when {
 
@@ -38,7 +45,21 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
           setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
           val actual = await(service.updateContactPref(bouncedEmailPermanentBounceModel))
 
+          val testAuditDetailRaw = Map[String, String](elems =
+            "retrievedEventId" -> "some-event-id",
+            "retrievedGroupId" -> "some-group-id",
+            "retrievedTimestamp" -> "2021-04-07T09:46:29+00:00",
+            "retrievedEmailAddress" -> "123@abc.com",
+            "retrievedEnrolment" -> "HMRC-MTD-VAT~VRN~GB123456789",
+            "retrievedEvent" -> "PermanentBounce",
+            "attemptedIdentifier" -> "123456789",
+            "attemptedEmail" -> "123@abc.com"
+          )
+
           actual shouldBe successResponse
+          verify(mockAuditService, times(1))
+            .sendAuditEvent(ArgumentMatchers.eq("BouncedEmailData"), ArgumentMatchers.eq(testAuditDetailRaw))(any(), any(), any())
+
         }
       }
 
@@ -48,6 +69,14 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
           val successResponse : Option[UpdateContactPrefResponse] = Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z","OK"))
           setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
           val actual = await(service.updateContactPref(bouncedEmailTemporaryBounceModel))
+
+          actual shouldBe successResponse
+        }
+
+        "return the same response when spaces are present in VRN and return the VRN with no spaces" in {
+          val successResponse: Option[UpdateContactPrefResponse] = Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z", "OK"))
+          setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
+          val actual = await(service.updateContactPref(bouncedEmailTemporaryBounceModelWithSpacesVRN))
 
           actual shouldBe successResponse
         }

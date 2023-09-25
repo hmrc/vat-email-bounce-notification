@@ -34,6 +34,12 @@ object BouncedEmailEventConstants {
     temporaryBounce
   )
 
+  val bouncedEmailEventTemporaryBounceModelWithSpacesVrn: BouncedEmailEvent = BouncedEmailEvent(
+    "123@abc.com",
+    "HMRC-MTD-VAT~VRN~GB 123 456 78 9",
+    temporaryBounce
+  )
+
   val bouncedEmailEventRejectedModel: BouncedEmailEvent = BouncedEmailEvent(
     "123@abc.com",
     "HMRC-MTD-VAT~VRN~GB123456789",
