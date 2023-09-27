@@ -51,7 +51,7 @@ class ContactPrefService @Inject()(connector: UpdateContactPrefConnector,
 
     vrn.matches(vrnRegex) match {
       case true => val requestModel : UpdateContactPrefRequest =
-        UpdateContactPrefRequest(identifier = vrn, identifierType = "VRN", emailaddress = email, unusableStatus = true)
+        UpdateContactPrefRequest(identifier = vrn, identifierType = "VRN", emailAddress = email, unusableStatus = true)
         val sentData = Map[String, String](elems =
           "identifier" -> vrn,
           "identifierType" -> "VRN",

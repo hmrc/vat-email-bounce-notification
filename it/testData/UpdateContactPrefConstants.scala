@@ -24,14 +24,14 @@ object UpdateContactPrefConstants {
   val updateContactPrefRequestMaxJson: JsValue = Json.obj(
     "identifierType" -> "VATC",
     "identifier" -> "123456789",
-    "emailaddress" -> "test@hrmc.gov.uk",
+    "emailAddress" -> "test@hrmc.gov.uk",
     "unusableStatus" -> true
   )
 
   val updateContactPrefRequestMaxModel: UpdateContactPrefRequest = UpdateContactPrefRequest(
     identifierType = "VATC",
     identifier = "123456789",
-    emailaddress = "test@hrmc.gov.uk",
+    emailAddress = "test@hrmc.gov.uk",
     unusableStatus = true
   )
 
