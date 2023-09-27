@@ -20,7 +20,7 @@ import play.api.libs.json._
 
 case class UpdateContactPrefRequest(identifierType: String,
                                     identifier: String,
-                                    emailaddress: String,
+                                    emailAddress: String,
                                     unusableStatus: Boolean)
 
 object UpdateContactPrefRequest {
