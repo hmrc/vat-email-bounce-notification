@@ -43,7 +43,7 @@ class UpdateContactPrefConnectorSpec extends TestUtil with MockHttpClient {
       "return None" in {
         val exception = new RequestTimeoutException("The request timed out!")
         mockHttpPut[UpdateContactPrefRequest, UpdateContactPrefResponse](Future.failed(exception))
-        val result: Future[Option[UpdateContactPrefResponse]] = TestConnector.updateContactPref(updateContactPrefRequestMaxModel)
+        val result: Future[Option[UpdateContactPrefResponse]] = TestConnector.updateContactPref(updateContactPrefRequestMaxModel, Some("test-id"))
 
         await(result) shouldBe None
       }

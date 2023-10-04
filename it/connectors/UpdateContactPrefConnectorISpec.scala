@@ -28,6 +28,8 @@ class UpdateContactPrefConnectorISpec extends IntegrationBaseSpec {
   val connector: UpdateContactPrefConnector = new UpdateContactPrefConnector(httpClient, appConfig)
   val url = "/income-tax/customer/VATC/contact-preference"
 
+  val testCorrelationId: Option[String] = Some("test-id")
+
   "updateContactPref" should {
 
     "return an UpdateContactPrefResponse model" when {
@@ -39,7 +41,7 @@ class UpdateContactPrefConnectorISpec extends IntegrationBaseSpec {
         val expectedValue: Option[UpdateContactPrefResponse] = Some(updateContactPrefResponse)
 
         val result: Option[UpdateContactPrefResponse] =
-          await(connector.updateContactPref(updateContactPrefRequestMaxModel))
+          await(connector.updateContactPref(updateContactPrefRequestMaxModel, testCorrelationId))
         result shouldBe expectedValue
       }
 
@@ -53,7 +55,7 @@ class UpdateContactPrefConnectorISpec extends IntegrationBaseSpec {
         val expectedValue = None
 
         val result: Option[UpdateContactPrefResponse] =
-          await(connector.updateContactPref(updateContactPrefRequestMaxModel))
+          await(connector.updateContactPref(updateContactPrefRequestMaxModel, testCorrelationId))
         result shouldBe expectedValue
       }
       "an unexpected responses is received from EIS" in {
@@ -64,7 +66,7 @@ class UpdateContactPrefConnectorISpec extends IntegrationBaseSpec {
         val expectedValue = None
 
         val result: Option[UpdateContactPrefResponse] =
-          await(connector.updateContactPref(updateContactPrefRequestMaxModel))
+          await(connector.updateContactPref(updateContactPrefRequestMaxModel, testCorrelationId))
         result shouldBe expectedValue
       }
     }

@@ -28,7 +28,7 @@ class ContactPrefService @Inject()(connector: UpdateContactPrefConnector,
                                    auditService: AuditService)
                                   (implicit ec: ExecutionContext) extends LoggerUtil {
 
-  def updateContactPref(request : BouncedEmail)(implicit headerCarrier: HeaderCarrier): Future[Option[UpdateContactPrefResponse]] = {
+  def updateContactPref(request : BouncedEmail, correlationId: Option[String])(implicit headerCarrier: HeaderCarrier): Future[Option[UpdateContactPrefResponse]] = {
 
     val charsToKeep = 9
     val noSpaces = request.event.enrolment.replace(" ", "")
@@ -52,13 +52,7 @@ class ContactPrefService @Inject()(connector: UpdateContactPrefConnector,
     vrn.matches(vrnRegex) match {
       case true => val requestModel : UpdateContactPrefRequest =
         UpdateContactPrefRequest(identifier = vrn, identifierType = "VRN", emailAddress = email, unusableStatus = true)
-        val sentData = Map[String, String](elems =
-          "identifier" -> vrn,
-          "identifierType" -> "VRN",
-          "emailAddress" -> email,
-          "unstableStatus" -> "true"
-        )
-        connector.updateContactPref(requestModel)(HeaderCarrier(), ec)
+        connector.updateContactPref(requestModel, correlationId)(HeaderCarrier(), ec)
       case _ => logger.warn(s"[ContactPrefService][updateContactPref] failed to validate vrn - $vrn")
         Future.successful(None)
 

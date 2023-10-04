@@ -17,15 +17,13 @@
 package connectors
 
 import config.AppConfig
+import connectors.httpParsers.UpdateContactPrefHttpParser.UpdateContactPrefReads
 import models.{UpdateContactPrefRequest, UpdateContactPrefResponse}
-
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpException}
 import utils.LoggerUtil
 
 import java.util.UUID.randomUUID
-import connectors.httpParsers.UpdateContactPrefHttpParser.UpdateContactPrefReads
-
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -33,9 +31,19 @@ class UpdateContactPrefConnector @Inject()(val http: HttpClient, val appConfig: 
 
 private[connectors] def updateContactPrefUrl() = s"${appConfig.eisUrl}/income-tax/customer/VATC/contact-preference"
 
-  def updateContactPref(model: UpdateContactPrefRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[UpdateContactPrefResponse]] = {
 
-    val eisHeaders = Seq("Authorization" -> s"Bearer ${appConfig.eisToken}", "CorrelationId" -> randomUUID().toString, "Environment" -> appConfig.eisEnvironment)
+  def updateContactPref(model: UpdateContactPrefRequest,
+                        correlationId: Option[String])(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[UpdateContactPrefResponse]] = {
+
+    val correlationIdString: String = correlationId match {
+      case Some(value) => value
+      case _ => randomUUID().toString
+    }
+
+    val eisHeaders = Seq(
+      "Authorization" -> s"Bearer ${appConfig.eisToken}",
+      "X-Correlation-ID" -> correlationIdString,
+      "Environment" -> appConfig.eisEnvironment)
 
     val url = updateContactPrefUrl()
 
