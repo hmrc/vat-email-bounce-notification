@@ -34,6 +34,7 @@ trait MockUpdateContactPrefService extends TestUtil {
 
     when(
       mockUpdateContactPrefService.updateContactPref(
+        ArgumentMatchers.any(),
         ArgumentMatchers.any()
       )(ArgumentMatchers.any())
     ).thenReturn(Future.successful(response))

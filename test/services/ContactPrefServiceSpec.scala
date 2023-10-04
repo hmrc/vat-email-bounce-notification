@@ -17,21 +17,20 @@
 package services
 
 import common.BouncedEmailConstants._
-import models.UpdateContactPrefResponse
-import utils.TestUtil
 import mocks.connectors.MockUpdateContactPrefConnector
+import models.UpdateContactPrefResponse
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.verify
 import org.mockito.internal.verification.VerificationModeFactory.times
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
-import uk.gov.hmrc.http.HeaderCarrier
+import utils.TestUtil
 
 
 class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnector{
 
   val mockAuditService: AuditService = mock[AuditService]
-
+  val testCorrelation: Option[String] = Some("test")
   "The .updateContactPref method" when {
 
     val service = new ContactPrefService(mockUpdateContactPrefConnector, mockAuditService)
@@ -43,7 +42,7 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
         "return the same response" in {
           val successResponse : Option[UpdateContactPrefResponse] = Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z","OK"))
           setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
-          val actual = await(service.updateContactPref(bouncedEmailPermanentBounceModel))
+          val actual = await(service.updateContactPref(bouncedEmailPermanentBounceModel, testCorrelation))
 
           val testAuditDetailRaw = Map[String, String](elems =
             "retrievedEventId" -> "some-event-id",
@@ -68,7 +67,7 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
         "return the same response" in {
           val successResponse : Option[UpdateContactPrefResponse] = Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z","OK"))
           setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
-          val actual = await(service.updateContactPref(bouncedEmailTemporaryBounceModel))
+          val actual = await(service.updateContactPref(bouncedEmailTemporaryBounceModel, testCorrelation))
 
           actual shouldBe successResponse
         }
@@ -76,7 +75,7 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
         "return the same response when spaces are present in VRN and return the VRN with no spaces" in {
           val successResponse: Option[UpdateContactPrefResponse] = Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z", "OK"))
           setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
-          val actual = await(service.updateContactPref(bouncedEmailTemporaryBounceModelWithSpacesVRN))
+          val actual = await(service.updateContactPref(bouncedEmailTemporaryBounceModelWithSpacesVRN, testCorrelation))
 
           actual shouldBe successResponse
         }
@@ -87,7 +86,7 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
         "return the same response" in {
           val successResponse : Option[UpdateContactPrefResponse] = Some(UpdateContactPrefResponse("2020-01-01T09:00:00Z","OK"))
           setupUpdateContactPref(updateContactPrefRequestMaxModel)(successResponse)
-          val actual = await(service.updateContactPref(bouncedEmailRejectedModel))
+          val actual = await(service.updateContactPref(bouncedEmailRejectedModel, testCorrelation))
 
           actual shouldBe successResponse
         }
@@ -99,7 +98,7 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
       "return None" in {
         val errorResponse: Option[UpdateContactPrefResponse] = None
         setupUpdateContactPref(updateContactPrefRequestMaxModel)(errorResponse)
-        val actual = await(service.updateContactPref(bouncedEmailPermanentBounceModel))
+        val actual = await(service.updateContactPref(bouncedEmailPermanentBounceModel, testCorrelation))
         actual shouldBe errorResponse
       }
     }
@@ -108,7 +107,7 @@ class ContactPrefServiceSpec extends TestUtil with MockUpdateContactPrefConnecto
 
       "return None" in {
         val errorResponse: Option[UpdateContactPrefResponse] = None
-        val actual = await(service.updateContactPref(bouncedEmailInvalidVRNModel))
+        val actual = await(service.updateContactPref(bouncedEmailInvalidVRNModel, testCorrelation))
         actual shouldBe errorResponse
       }
     }

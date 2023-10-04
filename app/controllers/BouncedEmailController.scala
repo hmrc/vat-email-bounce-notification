@@ -37,9 +37,10 @@ class BouncedEmailController @Inject()(cc: ControllerComponents, contactPrefServ
   extends BackendController(cc) {
 
   def process: Action[JsValue] = Action.async(parse.json) { implicit request =>
+
     if (appConfig.features.allowEventHubRequest()) {
       withJsonBody[BouncedEmail] { emailRequestModel =>
-        contactPrefService.updateContactPref(emailRequestModel).map{
+        contactPrefService.updateContactPref(emailRequestModel, request.headers.get("X-Correlation-ID")).map{
           case Some(_) => Ok
           case None => NotModified
         }
