@@ -2,4 +2,3 @@
 ->         /vat-email-bounce-notification      app.Routes
 ->         /                                   health.Routes
 
-GET        /admin/metrics                      com.kenshoo.play.metrics.MetricsController.metrics
