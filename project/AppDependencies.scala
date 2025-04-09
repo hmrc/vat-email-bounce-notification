@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-import sbt._
+import sbt.*
 
 object AppDependencies {
 
-  val bootstrapPlayVersion = "8.4.0"
+  val bootstrapPlayVersion = "8.6.0"
 
-  val compile = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-backend-play-30"  % bootstrapPlayVersion
+  val compile: Seq[ModuleID] = Seq(
+    "uk.gov.hmrc" %% "bootstrap-backend-play-30" % bootstrapPlayVersion
   )
 
   val testScope = "test,it"
 
-  val test = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-test-play-30"     % bootstrapPlayVersion  % testScope,
-    "org.scalatestplus"       %% "mockito-3-4"                % "3.2.3.0"             % testScope
+  val test: Seq[ModuleID] = Seq(
+    "uk.gov.hmrc"       %% "bootstrap-test-play-30" % bootstrapPlayVersion % testScope,
+    "org.scalatestplus" %% "mockito-3-4"            % "3.2.10.0"           % testScope
   )
 }
