@@ -52,7 +52,6 @@ lazy val microservice = Project(appName, file("."))
   .settings(coverageSettings *)
   .configs(IntegrationTest)
   .settings(integrationTestSettings() *)
-  .settings(resolvers += Resolver.jcenterRepo)
 
 scalacOptions ++= Seq(
   "-Wconf:cat=unused-imports&src=routes/.*:s",
