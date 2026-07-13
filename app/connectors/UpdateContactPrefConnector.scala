@@ -27,32 +27,29 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UpdateContactPrefConnector @Inject()(val http: HttpClient, val appConfig: AppConfig) extends LoggerUtil {
+class UpdateContactPrefConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends LoggerUtil {
 
-private[connectors] def updateContactPrefUrl() = s"${appConfig.eisUrl}/income-tax/customer/VATC/contact-preference"
+  private[connectors] def updateContactPrefUrl() = s"${appConfig.ifsUrl}/income-tax/customer/VATC/contact-preference"
 
-
-  def updateContactPref(model: UpdateContactPrefRequest,
-                        correlationId: Option[String])(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[UpdateContactPrefResponse]] = {
+  def updateContactPref(model: UpdateContactPrefRequest, correlationId: Option[String])(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext): Future[Option[UpdateContactPrefResponse]] = {
 
     val correlationIdString: String = correlationId match {
       case Some(value) => value
-      case _ => randomUUID().toString
+      case _           => randomUUID().toString
     }
 
     val eisHeaders = Seq(
-      "Authorization" -> s"Bearer ${appConfig.eisToken}",
+      "Authorization"    -> s"Bearer ${appConfig.ifsEncodedToken}",
       "X-Correlation-ID" -> correlationIdString,
-      "Environment" -> appConfig.eisEnvironment)
+      "Environment"      -> appConfig.ifsEnvironment)
 
     val url = updateContactPrefUrl()
 
-    logger.debug(s"[UpdateContactPrefConnector][updateContactPref] - Calling PUT $url \nHeaders: $eisHeaders")
-    http.PUT(url, model, eisHeaders)(implicitly, UpdateContactPrefReads, hc, ec).recover {
-      case ex: HttpException =>
-        logger.warn(s"[UpdateContactPrefConnector][updateContactPref] - HTTP exception received: ${ex.message}")
-        None
+    http.PUT(url, model, eisHeaders)(implicitly, UpdateContactPrefReads, hc, ec).recover { case ex: HttpException =>
+      logger.warn(s"[UpdateContactPrefConnector][updateContactPref] - HTTP exception received: ${ex.message}")
+      None
     }
   }
 }
-
