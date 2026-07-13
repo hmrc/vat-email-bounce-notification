@@ -49,7 +49,7 @@ trait IntegrationBaseSpec extends AnyWordSpecLike with Matchers with GuiceOneSer
   def servicesConfig: Map[String, String] = Map(
     "microservice.services.auth.host" -> mockHost,
     "microservice.services.auth.port" -> mockPort,
-    "microservice.services.eis.url" -> mockUrl
+    "microservice.services.ifs.url" -> mockUrl
   )
 
   def stubPutRequest(url: String, returnStatus: Int, returnBody: String): StubMapping =
