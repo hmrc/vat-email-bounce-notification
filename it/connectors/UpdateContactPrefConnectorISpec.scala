@@ -58,7 +58,7 @@ class UpdateContactPrefConnectorISpec extends IntegrationBaseSpec {
           await(connector.updateContactPref(updateContactPrefRequestMaxModel, testCorrelationId))
         result shouldBe expectedValue
       }
-      "an unexpected responses is received from EIS" in {
+      "an unexpected responses is received from IFS" in {
 
         stubPutRequest(url, BAD_REQUEST, Json.obj("code" -> 400,
           "reason" -> "BAD REQUEST").toString())
