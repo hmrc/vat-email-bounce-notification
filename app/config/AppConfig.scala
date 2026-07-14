@@ -32,9 +32,8 @@ class AppConfig @Inject() (val servicesConfig: ServicesConfig)(implicit val conf
   lazy val eisToken: String       = servicesConfig.getString("microservice.services.eis.auth-token")
   lazy val eisUrl: String         = servicesConfig.getString("microservice.services.eis.url")
 
-  lazy val ifsEnvironment: String   = servicesConfig.getString("microservice.services.ifs.environment")
-  lazy val ifsUrl: String           = servicesConfig.getString("microservice.services.ifs.url")
-  private lazy val ifsToken: String = servicesConfig.getString("microservice.services.ifs.auth-token")
-  def ifsEncodedToken: String       = Base64.getEncoder.encodeToString(ifsToken.getBytes("UTF-8"))
+  lazy val ifsEnvironment: String = servicesConfig.getString("microservice.services.ifs.environment")
+  lazy val ifsUrl: String         = servicesConfig.getString("microservice.services.ifs.url")
+  lazy val ifsToken: String       = servicesConfig.getString("microservice.services.ifs.auth-token")
 
 }
