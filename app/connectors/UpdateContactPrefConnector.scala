@@ -41,7 +41,7 @@ class UpdateContactPrefConnector @Inject() (val http: HttpClient, val appConfig:
     }
 
     val eisHeaders = Seq(
-      "Authorization"    -> s"Bearer ${appConfig.ifsEncodedToken}",
+      "Authorization"    -> s"Bearer ${appConfig.ifsToken}",
       "X-Correlation-ID" -> correlationIdString,
       "Environment"      -> appConfig.ifsEnvironment)
 
